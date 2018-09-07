@@ -2,6 +2,7 @@
 *.d
 
 # clion
+.idea
 *.iml
 *.xml
 
