@@ -1,0 +1,101 @@
+//
+//  array_stack.c
+//  data-structure
+//
+//  Created by determination on 2018/9/4.
+//  Copyright © 2018年 determination. All rights reserved.
+//
+
+#include "array_stack.h"
+
+
+bool initStack_AS(ArrayStackPtr stack)
+{
+    stack->data = (DataType *) malloc(sizeof(DataType) * STACK_INIT_SIZE);
+    if (!stack->data) {
+        printf("内存空间不足！");
+        return false;
+    }
+    makeEmpty_AS(stack);
+    stack->size = STACK_INIT_SIZE;
+    return true;
+}
+
+void makeEmpty_AS(ArrayStackPtr stack)
+{
+    stack->top = EMPTY;
+}
+
+bool isEmpty_AS(ArrayStackPtr stack)
+{
+    return stack->top == EMPTY;
+}
+
+void pop_AS(ArrayStackPtr stack)
+{
+    if (isEmpty_AS(stack)) {
+        printf("栈为空，无法弹出任何元素");
+        return;
+    }
+    
+    stack->top--;
+}
+
+void push_AS(ArrayStackPtr stack, DataType data)
+{
+    if (stack->top == (stack->size - 1)) {
+        stack->data = (DataType *) realloc(stack->data, (stack->size + STACKINCREACE) * sizeof(DataType));
+        
+        if (!stack->data) {
+            printf("内存分配失败！");
+            return;
+        }
+        
+        stack->size += STACKINCREACE;
+    }
+    
+    stack->data[++stack->top] = data;
+}
+
+DataType topAndPop_AS(ArrayStackPtr stack)
+{
+    if (isEmpty_AS(stack)) {
+        printf("栈为空，无法弹出任何元素");
+        return -1;
+    }
+    
+    return stack->data[stack->top--];
+}
+
+void clear_AS(ArrayStackPtr stack)
+{
+    makeEmpty_AS(stack);
+}
+
+void destory_AS(ArrayStackPtr stack)
+{
+    if (stack) {
+        free(stack->data);
+        free(stack);
+    }
+}
+
+int capcity_AS(ArrayStackPtr stack)
+{
+    return stack->size;
+}
+
+int size_AS(ArrayStackPtr stack)
+{
+    return stack->top + 1;
+}
+
+void showStack_AS(ArrayStackPtr stack)
+{
+    int count = stack->top;
+    while (count >= 0) {
+        printf("%d\t", stack->data[count--]);
+    }
+    printf("\n");
+    
+}
