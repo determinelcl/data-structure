@@ -8,15 +8,15 @@
 
 #include "linked_list.h"
 
-bool newLinkedList(LinkedList list)
+bool newLinkedList(LinkedList *list)
 {
-    list = malloc(sizeof(struct Node));
-    if (list == NULL) {
+    *list = (LinkedList) malloc(sizeof(struct Node));
+    if (*list == NULL) {
         printf("内存空间不足！");
         return false;
     }
     
-    list->next = NULL;
+    (*list)->next = NULL;
     return true;
 }
 
@@ -68,7 +68,7 @@ void add_LL(DataType_LL data, LinkedList list, Position_LL pos)
     Position_LL tempCell;
     tempCell = malloc(sizeof(struct Node));
     
-    if (tempCell) {
+    if (!tempCell) {
         printf("内存空间不足！");
         return;
     }
@@ -103,7 +103,7 @@ Position_LL first_LL(LinkedList list)
 
 Position_LL advance_LL(Position_LL pos)
 {
-    return !pos ? pos->next : pos;
+    return pos ? pos->next : pos;
 }
 
 DataType_LL retrieve_LL(Position_LL pos)

@@ -344,7 +344,7 @@ void testLinkedQueue(void)
     
     printf("入队20个元素\n");
     for (int i = 0; i < 20; i++) {
-        enqueue_LQ(queue, i + 1);
+        enqueue_LQ(queue, &i);
     }
     printf("队列是否为空：%s\n", isEmpty_LQ(queue) ? "是" : "否");
     printf("队列的元素个数：%d\n", size_LQ(queue));
@@ -357,19 +357,20 @@ void testLinkedQueue(void)
     printf("队列中的元素是：\n");
     showLinkedQueue_LQ(queue);
     
-    printf("出队并打印元素，出队的元素是：%d\n", frontAndDequeue_LQ(queue));
+    printf("出队并打印元素，出队的元素是：%d\n", *(int *)frontAndDequeue_LQ(queue));
     printf("队列是否为空：%s\n", isEmpty_LQ(queue) ? "是" : "否");
     printf("队列的元素个数：%d\n", size_LQ(queue));
     printf("队列中的元素是：\n");
     showLinkedQueue_LQ(queue);
     
-    printf("打印当前队列的最前面的一个元素：%d\n", front_LQ(queue));
+    printf("打印当前队列的最前面的一个元素：%d\n", *(int *)front_LQ(queue));
     printf("队列是否为空：%s\n", isEmpty_LQ(queue) ? "是" : "否");
     printf("队列的元素个数：%d\n", size_LQ(queue));
     printf("队列中的元素是：\n");
     showLinkedQueue_LQ(queue);
-    
-    printf("入队一个元素：102，%s\n", enqueue_LQ(queue, 102) ? "入队成功" : "入队失败");
+
+    int num = 102;
+    printf("入队一个元素：102，%s\n", enqueue_LQ(queue, &num) ? "入队成功" : "入队失败");
     printf("队列是否为空：%s\n", isEmpty_LQ(queue) ? "是" : "否");
     printf("队列的元素个数：%d\n", size_LQ(queue));
     printf("队列中的元素是：\n");
@@ -381,13 +382,14 @@ void testLinkedQueue(void)
     printf("队列的元素个数：%d\n", size_LQ(queue));
     printf("队列中的元素是：\n");
     showLinkedQueue_LQ(queue);
-    
-    printf("入队一个元素：100，%s\n", enqueue_LQ(queue, 100) ? "入队成功" : "入队失败");
-    printf("入队一个元素：101，%s\n", enqueue_LQ(queue, 101) ? "入队成功" : "入队失败");
-    printf("入队一个元素：102，%s\n", enqueue_LQ(queue, 102) ? "入队成功" : "入队失败");
-    printf("入队一个元素：103，%s\n", enqueue_LQ(queue, 103) ? "入队成功" : "入队失败");
-    printf("入队一个元素：104，%s\n", enqueue_LQ(queue, 104) ? "入队成功" : "入队失败");
-    printf("入队一个元素：105，%s\n", enqueue_LQ(queue, 105) ? "入队成功" : "入队失败");
+
+    int datas[6] = {100, 101, 102, 103, 104, 105};
+    printf("入队一个元素：100，%s\n", enqueue_LQ(queue, &datas[0]) ? "入队成功" : "入队失败");
+    printf("入队一个元素：101，%s\n", enqueue_LQ(queue, &datas[1]) ? "入队成功" : "入队失败");
+    printf("入队一个元素：102，%s\n", enqueue_LQ(queue, &datas[2]) ? "入队成功" : "入队失败");
+    printf("入队一个元素：103，%s\n", enqueue_LQ(queue, &datas[3]) ? "入队成功" : "入队失败");
+    printf("入队一个元素：104，%s\n", enqueue_LQ(queue, &datas[4]) ? "入队成功" : "入队失败");
+    printf("入队一个元素：105，%s\n", enqueue_LQ(queue, &datas[5]) ? "入队成功" : "入队失败");
     printf("队列是否为空：%s\n", isEmpty_LQ(queue) ? "是" : "否");
     printf("队列的元素个数：%d\n", size_LQ(queue));
     printf("队列中的元素是：\n");

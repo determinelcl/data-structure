@@ -48,7 +48,7 @@ DataType_LQ front_LQ(LinkedQueue queue)
     assert(queue != NULL);
     if (isEmpty_LQ(queue)) {
         printf("队列为空");
-        return  -1;
+        return  NULL;
     }
     
     return queue->front->data;
@@ -60,7 +60,7 @@ DataType_LQ frontAndDequeue_LQ(LinkedQueue queue)
     
     if (isEmpty_LQ(queue)) {
         printf("队列为空");
-        return -1;
+        return NULL;
     }
     
     QueueNodePtr temp = queue->front;
@@ -127,7 +127,7 @@ void showLinkedQueue_LQ(LinkedQueue queue)
     if (!isEmpty_LQ(queue)) {
         QueueNodePtr temp = queue->front;
         while (temp) {
-            printf("%d\t", temp->data);
+            printf("%d\t", *(int *)temp->data);
             temp = temp->next;
         }
     }

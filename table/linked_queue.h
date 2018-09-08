@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-typedef int DataType_LQ;
+typedef void* DataType_LQ;
 typedef struct QueueNodeRecord {
     DataType_LQ data;
     struct QueueNodeRecord * next;

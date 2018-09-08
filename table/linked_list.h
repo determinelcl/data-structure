@@ -23,7 +23,7 @@ typedef NODE LinkedList;
 typedef NODE Position_LL;
 
 // 新建一个链表
-bool newLinkedList(LinkedList list);
+bool newLinkedList(LinkedList *list);
 
 // 判断链表是否为空
 bool isEmpty_LL(LinkedList list);

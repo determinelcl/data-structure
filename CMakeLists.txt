@@ -14,5 +14,10 @@ set(TABLE_ADT table/array_list.h      table/array_list.c
                 table/array_queue_o.h   table/array_queue_o.c
                 table/linked_queue.h    table/linked_queue.c)
 
-set(TABLE_TEST_ADT test/table_test.h test/table_test.c)
-add_executable(hello main.c ${TABLE_ADT} ${TABLE_TEST_ADT})
+set(TEST_ADT test/table_test.h test/table_test.c
+                test/tree_test.h test/tree_test.c)
+
+set(TREE_ADT tree/binary_tree.h tree/binary_tree.c
+                tree/search_tree.h tree/search_tree.c)
+
+add_executable(hello main.c ${TABLE_ADT} ${TEST_ADT} ${TREE_ADT})
