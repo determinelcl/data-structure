@@ -9,6 +9,14 @@
 #include "linked_queue.h"
 #define EMPTY_LQ 0
 
+
+LinkedQueue newLinkedQueue() {
+    LinkedQueue queue = (LinkedQueue) malloc(sizeof(Queue_LQ));
+
+    initLinkedQueue(queue);
+    return queue;
+}
+
 bool initLinkedQueue(LinkedQueue queue)
 {
     assert(queue != NULL);

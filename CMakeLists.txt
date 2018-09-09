@@ -3,7 +3,7 @@ project(hello C)
 
 set(CMAKE_C_STANDARD 11)
 
-include_directories(table test)
+include_directories(table test tree)
 set(TABLE_ADT table/array_list.h      table/array_list.c
                 table/linked_list.h     table/linked_list.c
                 table/linked_list2.h    table/linked_list2.c
@@ -14,10 +14,12 @@ set(TABLE_ADT table/array_list.h      table/array_list.c
                 table/array_queue_o.h   table/array_queue_o.c
                 table/linked_queue.h    table/linked_queue.c)
 
-set(TEST_ADT test/table_test.h test/table_test.c
-                test/tree_test.h test/tree_test.c)
 
 set(TREE_ADT tree/binary_tree.h tree/binary_tree.c
                 tree/search_tree.h tree/search_tree.c)
 
-add_executable(hello main.c ${TABLE_ADT} ${TEST_ADT} ${TREE_ADT})
+set(TEST_ADT test/table_test.h test/table_test.c
+                test/tree_test.h test/tree_test.c)
+
+
+add_executable(hello main.c ${TABLE_ADT} ${TREE_ADT} ${TEST_ADT} )

@@ -197,7 +197,7 @@ void showList_AL(ArrayListPtr arrayListPtr)
     printf("\n顺序表表长 = %d, 元素个数 = %d,其元素分别为：\n\t", arrayListPtr->capacity, arrayListPtr->length);
     while(i < arrayListPtr->length)
     {
-        printf("%-10d\t", arrayListPtr->data[i]);
+        printf("%d\t", arrayListPtr->data[i]);
         i++;
     }
     printf("\n");

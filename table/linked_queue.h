@@ -18,7 +18,7 @@ typedef void* DataType_LQ;
 typedef struct QueueNodeRecord {
     DataType_LQ data;
     struct QueueNodeRecord * next;
-}QueueNode, * QueueNodePtr;
+} QueueNode, * QueueNodePtr;
 
 typedef struct {
     QueueNodePtr front;
@@ -26,6 +26,7 @@ typedef struct {
     int size;
 } Queue_LQ, *LinkedQueue;
 
+LinkedQueue newLinkedQueue(void);
 bool initLinkedQueue(LinkedQueue queue);
 bool isEmpty_LQ(LinkedQueue queue);
 bool enqueue_LQ(LinkedQueue queue, DataType_LQ data);

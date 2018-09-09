@@ -10,6 +10,7 @@
 #define table_test_h
 
 #include "array_list.h"
+#include "linked_list.h"
 #include "linked_list2.h"
 #include "linked_list_o.h"
 #include "linked_list2_o.h"
@@ -19,6 +20,7 @@
 #include "linked_queue.h"
 
 void testArrayList(void);
+void testLinkedList(void);
 void testLinkedList2(void);
 void testLinkedListO(void);
 void testLinkedList2O(void);

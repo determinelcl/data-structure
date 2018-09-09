@@ -9,11 +9,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "linked_queue.h"
 
-#define LEFT_BT 0
-#define RIGHT_BT 1
-
-typedef int DataType_BT;
+typedef void* DataType_BT;
 typedef struct TreeNode_BT *PtrToNode_BT;
 
 
@@ -23,22 +21,30 @@ struct TreeNode_BT {
     PtrToNode_BT right;
 };
 
-typedef struct {
+typedef struct BiTree{
     PtrToNode_BT root;
     int size;
 }* BinaryTree;
 
-void init_BT(BinaryTree tree);
+typedef enum {
+    LEFT_CHILD, RIGHT_CHILD
+} ChildTree;
 
-bool insert_BT(BinaryTree tree, DataType_BT data, int flag);
+BinaryTree newBinaryTree(void);
+
+bool isEmpty_BT(BinaryTree tree);
+
+bool insert_BT(BinaryTree tree, DataType_BT data, ChildTree flag);
 
 void preTraversal_BT(BinaryTree tree);
 
 void middleTraversal_BT(BinaryTree tree);
 
-void behandTraversal_BT(BinaryTree tree);
+void behindTraversal_BT(BinaryTree tree);
 
 void levelTraversal_BT(BinaryTree tree);
+
+int size_BT(BinaryTree tree);
 
 
 #endif //HELLO_TREE_LR_H

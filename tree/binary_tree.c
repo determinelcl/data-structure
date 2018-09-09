@@ -3,37 +3,61 @@
 //
 
 #include "binary_tree.h"
-#include "linked_queue.h"
 
-#define EMPTY -1
+#define EMPTY 0
 
 
-void init_BT(BinaryTree tree) {
+BinaryTree newBinaryTree() {
+    BinaryTree tree = (BinaryTree) malloc(sizeof(struct BiTree));
     assert(tree != NULL);
 
     tree->root = NULL;
     tree->size = EMPTY;
+
+    return tree;
+}
+
+static void initTreeNode(PtrToNode_BT node) {
+    node->right = NULL;
+    node->left = NULL;
 }
 
 bool isEmpty_BT(BinaryTree tree) {
     return tree->size == EMPTY;
 }
 
-static bool insertNode_BT(PtrToNode_BT *tree, DataType_BT data) {
-    if (*tree == NULL) {
-        *tree = (PtrToNode_BT) malloc(sizeof(struct TreeNode_BT));
-        assert(tree != NULL);
+static PtrToNode_BT createNode_BT() {
+    PtrToNode_BT tree = (PtrToNode_BT) malloc(sizeof(struct TreeNode_BT));
+    assert(tree != NULL);
+    initTreeNode(tree);
+    return tree;
+}
 
+static bool insertNodeL_BT(PtrToNode_BT *tree, DataType_BT data) {
+    if (*tree == NULL) {
+        *tree = createNode_BT();
         (*tree)->data = data;
         return true;
     } else if ((*tree)->left != NULL && (*tree)->right == NULL) {
-        return insertNode_BT(&(*tree)->right, data);
+        return insertNodeL_BT(&(*tree)->right, data);
     } else {
-        return insertNode_BT(&(*tree)->left, data);
+        return insertNodeL_BT(&(*tree)->left, data);
     }
 }
 
-bool insert_BT(BinaryTree tree, DataType_BT data, int flag) {
+static bool insertNodeR_BT(PtrToNode_BT *tree, DataType_BT data) {
+    if (*tree == NULL) {
+        *tree = createNode_BT();
+        (*tree)->data = data;
+        return true;
+    } else if ((*tree)->right != NULL && (*tree)->left == NULL) {
+        return insertNodeR_BT(&(*tree)->left, data);
+    } else {
+        return insertNodeR_BT(&(*tree)->right, data);
+    }
+}
+
+bool insert_BT(BinaryTree tree, DataType_BT data, ChildTree flag) {
     assert(tree != NULL);
 
     if (tree->root == NULL) {
@@ -41,23 +65,28 @@ bool insert_BT(BinaryTree tree, DataType_BT data, int flag) {
         assert(tree->root != NULL);
 
         tree->root->data = data;
+        initTreeNode(tree->root);
         tree->size++;
         return true;
     }
 
     // 用于判断是要插入左子树还是右子树
-    flag == LEFT_BT ?
-    insertNode_BT(&tree->root->left, data)
-                    :
-    insertNode_BT(&tree->root->right, data);
+    flag == LEFT_CHILD ?
+    insertNodeL_BT(&tree->root->left, data)
+                       :
+    insertNodeR_BT(&tree->root->right, data);
 
     tree->size++;
     return true;
 }
 
+static void printData(PtrToNode_BT tree) {
+    printf("%d\t", *(int *) tree->data);
+}
+
 static void pTraversal_BT(PtrToNode_BT tree) {
     if (tree == NULL) return;
-    printf("%d\t", tree->data);
+    printData(tree);
     pTraversal_BT(tree->left);
     pTraversal_BT(tree->right);
 }
@@ -70,9 +99,9 @@ void preTraversal_BT(BinaryTree tree) {
 
 static void mTraversal_BT(PtrToNode_BT tree) {
     if (tree == NULL) return;
-    pTraversal_BT(tree->left);
-    printf("%d\t", tree->data);
-    pTraversal_BT(tree->right);
+    mTraversal_BT(tree->left);
+    printData(tree);
+    mTraversal_BT(tree->right);
 }
 
 void middleTraversal_BT(BinaryTree tree) {
@@ -83,12 +112,12 @@ void middleTraversal_BT(BinaryTree tree) {
 
 static void beTraversal_BT(PtrToNode_BT tree) {
     if (tree == NULL) return;
-    pTraversal_BT(tree->left);
-    pTraversal_BT(tree->right);
-    printf("%d\t", tree->data);
+    beTraversal_BT(tree->left);
+    beTraversal_BT(tree->right);
+    printData(tree);
 }
 
-void behandTraversal_BT(BinaryTree tree) {
+void behindTraversal_BT(BinaryTree tree) {
     if (tree == NULL || tree->size == EMPTY) return;
     beTraversal_BT(tree->root);
     printf("\n\n");
@@ -97,13 +126,12 @@ void behandTraversal_BT(BinaryTree tree) {
 void levelTraversal_BT(BinaryTree tree) {
     if (tree == NULL || tree->size == EMPTY) return;
 
-    LinkedQueue queue = (LinkedQueue) malloc(sizeof(Queue_LQ));
-    initLinkedQueue(queue);
+    LinkedQueue queue = newLinkedQueue();
 
     enqueue_LQ(queue, tree->root);
     while (!isEmpty_LQ(queue)) {
         PtrToNode_BT node = frontAndDequeue_LQ(queue);
-        printf("%d\t", node->data);
+        printData(node);
 
         if (node->left != NULL)
             enqueue_LQ(queue, node->left);
@@ -113,6 +141,10 @@ void levelTraversal_BT(BinaryTree tree) {
     }
 
     printf("\n\n");
+}
+
+int size_BT(BinaryTree tree) {
+    return tree->size;
 }
 
 
