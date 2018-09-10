@@ -5,11 +5,7 @@
 #ifndef HELLO_SEARCH_TREE_H
 #define HELLO_SEARCH_TREE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
-
+#include "tree_generic.h"
 
 typedef struct TreeNode_ST *Position_ST;
 typedef struct TreeNode_ST *SearchTree;

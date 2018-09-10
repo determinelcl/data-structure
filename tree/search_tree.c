@@ -5,13 +5,6 @@
 #include "search_tree.h"
 #include "linked_queue.h"
 
-#define CASE_TYPE *(int *)
-#define PRINT_FMT(data) printf("%d\t", CASE_TYPE (data))
-
-typedef enum {
-    EQUAL, GT, LT
-} Comparable;
-
 
 SearchTree newSearchTree(void) {
     return NULL;
@@ -27,19 +20,12 @@ SearchTree makeEmpty_ST(SearchTree tree) {
     return NULL;
 }
 
-static Comparable compare_ST(DataType_ST data, DataType_ST another) {
-
-    if (CASE_TYPE data == CASE_TYPE another) return EQUAL;
-    else if (CASE_TYPE data > CASE_TYPE another) return GT;
-    else return LT;
-}
-
 Position_ST find_ST(SearchTree tree, DataType_ST data) {
     if (!tree) return NULL;
 
-    if (compare_ST(tree->data, data) == GT)
+    if (COMPARE_WITH(tree->data, data) == GT)
         return find_ST(tree->left, data);
-    else if (compare_ST(tree->data, data) == LT)
+    else if (COMPARE_WITH(tree->data, data) == LT)
         return find_ST(tree->right, data);
     else
         return tree;
@@ -69,7 +55,7 @@ SearchTree insert_ST(SearchTree tree, DataType_ST data) {
         tree->data = data;
         tree->left = tree->right = NULL;
     } else {
-        Comparable result = compare_ST(tree->data, data);
+        Comparable result = COMPARE_WITH(tree->data, data);
         if (result == GT)
             tree->left = insert_ST(tree->left, data);
         else tree->right = insert_ST(tree->right, data);
@@ -81,7 +67,7 @@ SearchTree insert_ST(SearchTree tree, DataType_ST data) {
 SearchTree delete_ST(SearchTree tree, DataType_ST data) {
     assert(tree);
 
-    Comparable result = compare_ST(tree->data, data);
+    Comparable result = COMPARE_WITH(tree->data, data);
 
     if (result == GT)
         tree->left = delete_ST(tree->left, data);

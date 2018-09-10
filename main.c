@@ -15,6 +15,7 @@ int main() {
     testLinkedQueue();
     testBinary_Tree();
     testSearchTree();
+    testAvlTree();
     printf("Hello, World!\n");
     return 0;
 }

@@ -5,10 +5,7 @@
 #ifndef HELLO_TREE_LR_H
 #define HELLO_TREE_LR_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
+#include "tree_generic.h"
 #include "linked_queue.h"
 
 typedef void* DataType_BT;
