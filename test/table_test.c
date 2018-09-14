@@ -17,60 +17,73 @@ void testArrayList(void) {
     puts("*                 顺序表测试例程                   *");
     puts("**************************************************");
 
+    ArrayListPtr listPtr = newArrayList();
+    printf("顺序表指针是否为空：%s\n", listPtr ? "否" : "是");
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(listPtr), size_AL(listPtr));
+    showList_AL(listPtr);
+
+    printf("销毁顺序表指针\n");
+    destroy_AL(&listPtr);
+    printf("顺序表指针是否为空：%s\n", listPtr ? "否" : "是");
+
     ArrayList arrayList;
     DataType_AL data;
-    //    ElemType* temp;
-    //1.初始化
-    newArrayList(&arrayList);
-    printf("初始化顺序表：size = %d, length = %d\n", arrayList.capacity, arrayList.length);
+
+    initArrayList(&arrayList);
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
-    printf("\n是否为空表？%s\n", answer(isEmpty_AL(&arrayList)));
-    int i = 0;
-    //2.插入元素
-    while (i < 20) {
+
+    printf("是否为空表？%s\n", answer(isEmpty_AL(&arrayList)));
+    for (int i = 0; i < 20; i++) {
         insert_AL(&arrayList, i + 1, i);
-        i++;
     }
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
-    //3.根据位置返回元素
 
     get_AL(&arrayList, 6, &data);
-    printf("\n第6个元素是: %d\n", data);
+    printf("第6个元素是: %d\n", data);
 
-    //4.查找某个元素是否存在
-    printf("\n6是否存在于表中？ %s\n", answer(isExist_AL(&arrayList, 6)));
-    printf("\n21是否存在于表中？ %s\n", answer(isExist_AL(&arrayList, 21)));
-    printf("\n是否为空表？ %s\n", answer(isEmpty_AL(&arrayList)));
+    printf("6是否存在于表中: %s\n", answer(isExist_AL(&arrayList, 6)));
+    printf("21是否存在于表中: %s\n", answer(isExist_AL(&arrayList, 21)));
+    printf("是否为空表: %s\n", answer(isEmpty_AL(&arrayList)));
 
-    //5.删除元素
     remove_AL(&arrayList, 11, &data);
-    printf("\n被删除的元素是：%d\n", data);
-    printf("删除之后的元素序列为：");
+    printf("被删除的元素是：%d\n", data);
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
+    printf("删除之后的元素序列为：\n");
     showList_AL(&arrayList);
 
     remove_AL(&arrayList, 11, &data);
-    printf("\n被删除的元素是：%d\n", data);
-    printf("删除之后的元素序列为：");
+    printf("被删除的元素是：%d\n", data);
+    printf("删除之后的元素序列为：\n");
     showList_AL(&arrayList);
 
-    //6.清空顺序表
-    printf("执行清空之后:");
+    printf("执行清空之后:\n");
     clear_AL(&arrayList);
-    insert_AL(&arrayList, 1, 1); //执行清空之后仍可插入
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
+    insert_AL(&arrayList, 1, 1);
     showList_AL(&arrayList);
 
-    //7.销毁顺序表
-    printf("执行销毁之后：");
-
-    destory_AL(&arrayList); //销毁只是回收了分配给线性表的空间，而arrayList变量依然存在，仍然可以访问arrayList.size等成员变量
+    printf("销毁顺序表：\n");
+    ArrayListPtr temp = &arrayList;
+    destroy_AL(&temp);
+    printf("顺序表指针是否为空：%s\n", temp ? "否" : "是");
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
 
-    i = 0;
-    while (i < 1) {
+    printf("插入元素\n");
+
+    for (int i = 0; i < 1; i++) {
         insert_AL(&arrayList, i + 1, i);
-        i++;
     }
-    insert_AL(&arrayList, 1, 6); //销毁之后再插入可能出现异常，因为地址已经被标记为可以被其他程序使用，当使用已经被占用的内存地址就会发生错误
+    insert_AL(&arrayList, 1, 6);
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
+    showList_AL(&arrayList);
+
+    int num = 10;
+    printf("添加元素%d\n", num);
+    add_AL(&arrayList, num);
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
 
     puts("\n");

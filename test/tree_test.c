@@ -126,7 +126,7 @@ void testSearchTree(void) {
     printf("二叉搜索树中最大的元素为：%d\n", *(int *) retrieve_ST(findMax_ST(tree)));
     printf("二叉搜索树中最小的元素为：%d\n", *(int *) retrieve_ST(findMin_ST(tree)));
 
-    printf("清空二叉树\n");
+    printf("清空二叉搜索树\n");
     tree = makeEmpty_ST(tree);
     printf("二叉搜索树是否为空: %s\n", isEmpty_ST(tree) ? "是" : "否");
     printf("二叉搜索树的元素数为：%d\n", size_ST(tree));
@@ -154,7 +154,7 @@ void testAvlTree(void) {
 
     printf("AVL平衡树是否为空: %s\n", isEmpty_AVLT(tree) ? "是" : "否");
     printf("AVL平衡树的元素数为：%d\n", size_AVLT(tree));
-    printf("AVL平衡树左子树的高度为：%d，右子树的高度为：%d\n", height_AVLT(tree->left),  height_AVLT(tree->right));
+    printf("AVL平衡树左子树的高度为：%d，右子树的高度为：%d\n", height_AVLT(tree->left), height_AVLT(tree->right));
     printf("先序遍历：\n");
     preTraversal_AVLT(tree);
     puts("\n");
@@ -173,7 +173,7 @@ void testAvlTree(void) {
     insert_AVLT(tree, &num);
     printf("AVL平衡树是否为空: %s\n", isEmpty_AVLT(tree) ? "是" : "否");
     printf("AVL平衡树的元素数为：%d\n", size_AVLT(tree));
-    printf("AVL平衡树左子树的高度为：%d，右子树的高度为：%d\n", height_AVLT(tree->left),  height_AVLT(tree->right));
+    printf("AVL平衡树左子树的高度为：%d，右子树的高度为：%d\n", height_AVLT(tree->left), height_AVLT(tree->right));
     printf("先序遍历：\n");
     preTraversal_AVLT(tree);
     puts("\n");
@@ -198,7 +198,7 @@ void testAvlTree(void) {
 
     printf("AVL平衡树是否为空: %s\n", isEmpty_AVLT(tree) ? "是" : "否");
     printf("AVL平衡树的元素数为：%d\n", size_AVLT(tree));
-    printf("AVL平衡树左子树的高度为：%d，右子树的高度为：%d\n", height_AVLT(tree->left),  height_AVLT(tree->right));
+    printf("AVL平衡树左子树的高度为：%d，右子树的高度为：%d\n", height_AVLT(tree->left), height_AVLT(tree->right));
     printf("先序遍历：\n");
     preTraversal_AVLT(tree);
     puts("\n");

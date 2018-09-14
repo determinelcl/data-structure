@@ -12,70 +12,129 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 
 typedef int DataType_AL;
 
-typedef struct  //顺序表三要素：元素基址、元素个数、表长
-{
-    DataType_AL * data; //数据元素基址
-    int length; //顺序表当前元素个数
-    int capacity; //顺序表表长
-} ArrayList, *ArrayListPtr; //顺序表三要素：元素基址、元素个数、表长
+typedef struct {
+    DataType_AL *data;
+    int length;
+    int capacity;
+} ArrayList, *ArrayListPtr;
 
 #define MAXSIZE 10
 #define INCREMENT 10
 
-/**
- * 初始化构造一个空顺序表
- */
-bool newArrayList(ArrayListPtr arrayListPtr);
 
 /**
- * 重置为空表；初始条件：顺序表存在
+ * 构造一个新的顺序表
+ *
+ * @return 新的顺序表
  */
-bool clear_AL(ArrayListPtr arrayListPtr);
+ArrayListPtr newArrayList(void);
 
 /**
- * 销毁顺序表，回收内存空间；初始条件：顺序表存在
+ * 初始化一个顺序表，
+ *
+ * @param list 顺序表的指针
+ * @return 返回初始化结果
  */
-bool destory_AL(ArrayListPtr arrayListPtr);
+bool initArrayList(ArrayListPtr list);
 
 /**
- * 根据位序返回元素
- * 思考：为什么要将返回结果作为参数传递进去而不是直接利用函数返回值传递？
- * 答：为了使函数更具有通用性，适应性更高，因为执行函数的结果有可能是正常返回指定的元素值，
- * 有可能查询失败而返回失败信息，此时如果用返回值类型做为函数返回值那么可能需要借助一些特殊值来区分失败的情况
+ * 清空顺序表中的元素
+ *
+ * @param list 指向顺序表的指针
+ * @return 清空是否成功
  */
-bool get_AL(ArrayListPtr arrayListPtr, int pos, DataType_AL* data);
+bool clear_AL(ArrayListPtr list);
 
 /**
- * 查找某个元素是否存在
+ * 销毁顺序表，由于传递的是指针，释放完成内存之后
+ * 要置指向被释放内存的引用为空，所以需要传递二级指针
+ *
+ * @param listPtr 执行顺序表指针的指针
+ * @return 销毁是否成功
  */
-bool isExist_AL(ArrayListPtr arrayListPtr, DataType_AL data);
+bool destroy_AL(ArrayListPtr *listPtr);
 
 /**
- * 判空
+ * 根据索引查询元素
+ *
+ * @param list 要查询的顺序表的指针
+ * @param index 索引位置
+ * @param data 查找到的数据将会存放在数据指针里
+ * @return 操作是否完成
  */
-bool isEmpty_AL(ArrayListPtr arrayListPtr);
+bool get_AL(ArrayListPtr list, int index, DataType_AL *data);
 
 /**
- * 添加元素到列表末尾
+ * 判断指定元素是否在指定列表中
+ *
+ * @param list 顺序表指针
+ * @param data 要判断是否存在的数据
+ * @return
  */
-bool add_AL(ArrayListPtr arrayListPtr, DataType_AL data);
+bool isExist_AL(ArrayListPtr list, DataType_AL data);
 
 /**
- * 插入元素到指定位置
+ * 判断顺序表是否为空
+ *
+ * @param list 顺序表指针
+ * @return 为空返回true，否则返回false
  */
-bool insert_AL(ArrayListPtr arrayListPtr, int pos, DataType_AL data);
+bool isEmpty_AL(ArrayListPtr list);
 
 /**
- * 删除指定位置元素，并用e返回
+ * 添加元素
+ *
+ * @param list 顺序表
+ * @param data 要添加的数据
+ * @return 返回操作是否成功
  */
-bool remove_AL(ArrayListPtr arrayListPtr, int pos, DataType_AL* data);
+bool add_AL(ArrayListPtr list, DataType_AL data);
 
 /**
- * 遍历顺序表
+ * 向顺序表中插入元素
+ *
+ * @param list 顺序表
+ * @param index 指定插入的索引位置
+ * @param data 插入的数据
+ * @return 操作是否成功
  */
-void showList_AL(ArrayListPtr arrayListPtr);
+bool insert_AL(ArrayListPtr list, int index, DataType_AL data);
+
+/**
+ * 删除指定索引位置的元素
+ *
+ * @param list 顺序表指针
+ * @param index 指定删除的索引位置
+ * @param data 删除的数据将会存放着data里面
+ * @return 操作是否成功
+ */
+bool remove_AL(ArrayListPtr list, int index, DataType_AL *data);
+
+/**
+ * 显示顺序表中的所有元素
+ *
+ * @param list 顺序表
+ */
+void showList_AL(ArrayListPtr list);
+
+/**
+ * 获取顺序表中元素的个数
+ *
+ * @param list 顺序表
+ * @return 顺序表的个数
+ */
+int size_AL(ArrayListPtr list);
+
+/**
+ * 获取顺序表的容量
+ *
+ * @param list 顺序表
+ * @return 顺序表的容量
+ */
+int capacity_AL(ArrayListPtr list);
 
 #endif /* array_list_h */
