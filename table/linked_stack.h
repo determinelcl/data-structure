@@ -12,27 +12,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 
-typedef int DataType;
-typedef struct Node_LS
-{
-    DataType data;
-    struct Node_LS * next;
-} StackNode_LS, *StackNodePtr_LS ;
+typedef void *DataType_LS;
+typedef struct Node_LS {
+    DataType_LS data;
+    struct Node_LS *next;
+} StackNode_LS, *StackNodePtr_LS;
 
-typedef struct
-{
+typedef struct {
     int size;
     StackNodePtr_LS top;
 } LinkedStack, *LinkedStackPtr;
 
+
+LinkedStackPtr newLinkStack(void);
+
 bool initLinedStack(LinkedStackPtr stack);
+
 bool isEmpty_LS(LinkedStackPtr stack);
-bool push_LS(LinkedStackPtr stack, DataType data);
+
+bool push_LS(LinkedStackPtr stack, DataType_LS data);
+
 void pop_LS(LinkedStackPtr stack);
-DataType topAndPop_LS(LinkedStackPtr stack);
+
+DataType_LS topAndPop_LS(LinkedStackPtr stack);
+
 int size_LS(LinkedStackPtr stack);
+
 bool clear_LS(LinkedStackPtr stack);
+
 void showStack_LS(LinkedStackPtr stack);
 
 

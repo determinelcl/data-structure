@@ -8,6 +8,8 @@
 
 #include "table_test.h"
 
+#define CASE_INT_TYPE *(int*)
+
 static char *answer(bool rs) {
     return rs ? "yes" : "no";
 }
@@ -34,34 +36,38 @@ void testArrayList(void) {
     showList_AL(&arrayList);
 
     printf("是否为空表？%s\n", answer(isEmpty_AL(&arrayList)));
+    int tempData[20] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
     for (int i = 0; i < 20; i++) {
-        insert_AL(&arrayList, i + 1, i);
+        insert_AL(&arrayList, i + 1, &tempData[i]);
     }
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
 
-    get_AL(&arrayList, 6, &data);
-    printf("第6个元素是: %d\n", data);
+    findAndIntoData_AL(&arrayList, 6, &data);
+    printf("第6个元素是: %d\n", CASE_INT_TYPE data);
 
-    printf("6是否存在于表中: %s\n", answer(isExist_AL(&arrayList, 6)));
-    printf("21是否存在于表中: %s\n", answer(isExist_AL(&arrayList, 21)));
+    int num1 = 6;
+    printf("6是否存在于表中: %s\n", answer(isExist_AL(&arrayList, &num1)));
+    int num2 = 21;
+    printf("21是否存在于表中: %s\n", answer(isExist_AL(&arrayList, &num2)));
     printf("是否为空表: %s\n", answer(isEmpty_AL(&arrayList)));
 
     remove_AL(&arrayList, 11, &data);
-    printf("被删除的元素是：%d\n", data);
+    printf("被删除的元素是：%d\n", CASE_INT_TYPE data);
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     printf("删除之后的元素序列为：\n");
     showList_AL(&arrayList);
 
     remove_AL(&arrayList, 11, &data);
-    printf("被删除的元素是：%d\n", data);
+    printf("被删除的元素是：%d\n", CASE_INT_TYPE data);
     printf("删除之后的元素序列为：\n");
     showList_AL(&arrayList);
 
     printf("执行清空之后:\n");
     clear_AL(&arrayList);
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
-    insert_AL(&arrayList, 1, 1);
+    int num3 = 1;
+    insert_AL(&arrayList, 1, &num3);
     showList_AL(&arrayList);
 
     printf("销毁顺序表：\n");
@@ -73,16 +79,17 @@ void testArrayList(void) {
 
     printf("插入元素\n");
 
-    for (int i = 0; i < 1; i++) {
-        insert_AL(&arrayList, i + 1, i);
-    }
-    insert_AL(&arrayList, 1, 6);
+
+    int num4 = 2;
+    insert_AL(&arrayList, 1, &num4);
+    int num5 = 6;
+    insert_AL(&arrayList, 1, &num5);
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
 
-    int num = 10;
-    printf("添加元素%d\n", num);
-    add_AL(&arrayList, num);
+    int num6 = 10;
+    printf("添加元素%d\n", num6);
+    add_AL(&arrayList, &num6);
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
 
@@ -358,8 +365,9 @@ void testLinkedStack(void) {
     printf("栈%s\n", isEmpty_LS(stack) ? "为空" : "不为空");
 
     printf("栈的元素个数是：%d\n", size_LS(stack));
+    int tempData[15] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
     for (int i = 0; i < 15; i++) {
-        push_LS(stack, i + 1);
+        push_LS(stack, &tempData[i]);
     }
     printf("栈的元素个数是：%d\n", size_LS(stack));
     printf("栈中的元素是：\n");
@@ -371,7 +379,7 @@ void testLinkedStack(void) {
     printf("栈中的元素是：\n");
     showStack_LS(stack);
 
-    printf("再次弹出栈顶元素，元素是：%d\n", topAndPop_LS(stack));
+    printf("再次弹出栈顶元素，元素是：%d\n", CASE_INT_TYPE topAndPop_LS(stack));
     printf("栈的元素个数是：%d\n", size_LS(stack));
     printf("栈中的元素是：\n");
     showStack_LS(stack);
@@ -382,7 +390,7 @@ void testLinkedStack(void) {
     showStack_LS(stack);
 
     for (int i = 0; i < 15; i++) {
-        push_LS(stack, i + 1);
+        push_LS(stack, &tempData[i]);
     }
     printf("栈的元素个数是：%d\n", size_LS(stack));
     printf("栈中的元素是：\n");

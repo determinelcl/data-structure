@@ -16,19 +16,19 @@
 #define STACKINCREACE 10
 #define EMPTY (-1)
 
-typedef int  DataType;
+typedef int  DataType_AS;
 typedef struct StackRecord{
     int size;
     int top;
-    DataType * data;
+    DataType_AS * data;
 } ArrayStack, *ArrayStackPtr;
 
 bool initStack_AS(ArrayStackPtr stack);
 void makeEmpty_AS(ArrayStackPtr stack);
 bool isEmpty_AS(ArrayStackPtr stack);
 void pop_AS(ArrayStackPtr stack);
-void push_AS(ArrayStackPtr stack, DataType data);
-DataType topAndPop_AS(ArrayStackPtr stack);
+void push_AS(ArrayStackPtr stack, DataType_AS data);
+DataType_AS topAndPop_AS(ArrayStackPtr stack);
 void clear_AS(ArrayStackPtr stack);
 void destory_AS(ArrayStackPtr stack);
 int capcity_AS(ArrayStackPtr stack);

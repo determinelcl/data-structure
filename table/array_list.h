@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-typedef int DataType_AL;
+typedef void *DataType_AL;
 
 typedef struct {
     DataType_AL *data;
@@ -66,7 +66,16 @@ bool destroy_AL(ArrayListPtr *listPtr);
  * @param data 查找到的数据将会存放在数据指针里
  * @return 操作是否完成
  */
-bool get_AL(ArrayListPtr list, int index, DataType_AL *data);
+bool findAndIntoData_AL(ArrayListPtr list, int index, DataType_AL *data);
+
+/**
+ * 根据索引查询元素，并返回
+ *
+ * @param list 要查询的顺序表的指针
+ * @param index 索引位置
+ * @return 找到返回数据元素，否则返回NULL
+ */
+DataType_AL get_AL(ArrayListPtr list, int index);
 
 /**
  * 判断指定元素是否在指定列表中

@@ -14,13 +14,13 @@
 #include <stdbool.h>
 #include <assert.h>
 
-typedef int DataType;
+typedef int DataType_AQ;
 typedef struct QueueRecord {
     int capacity;
-    int fornt;
+    int front;
     int rear;
     int size;
-    DataType* data;
+    DataType_AQ* data;
 } Queue_AQ, *ArrayQueue;
 
 bool isEmpty_AQ(ArrayQueue queue);
@@ -29,10 +29,10 @@ ArrayQueue newQueue_AQ(int maxSize);
 void disposeQueue_AQ(ArrayQueue queue);
 void makeEmpty_AQ(ArrayQueue queue);
 void clear_AQ(ArrayQueue queue);
-bool enqueue_AQ(ArrayQueue queue, DataType data);
-DataType front_AQ(ArrayQueue queue);
+bool enqueue_AQ(ArrayQueue queue, DataType_AQ data);
+DataType_AQ front_AQ(ArrayQueue queue);
 bool dequeue_AQ(ArrayQueue queue);
-DataType frontAndDequeue_AQ(ArrayQueue queue);
+DataType_AQ frontAndDequeue_AQ(ArrayQueue queue);
 int size_AQ(ArrayQueue queue);
 int capacty_AQ(ArrayQueue queue);
 void showQueue_AQ(ArrayQueue queue);

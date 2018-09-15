@@ -6,7 +6,7 @@
 
 void testBinary_Tree(void) {
     printf("*****************************************************\n");
-    printf("*                    二叉树测试例                    *\n");
+    printf("*               二叉树链式存储结构测试例程             *\n");
     printf("*****************************************************\n");
     BinaryTree tree = newBinaryTree();
     printf("二叉树是否为空:%s\n", isEmpty_BT(tree) ? "是" : "否");

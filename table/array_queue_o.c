@@ -22,7 +22,7 @@ bool isFull_AQ(ArrayQueue queue)
 void makeEmpty_AQ(ArrayQueue queue)
 {
     queue->size = 0;
-    queue->fornt = 1;
+    queue->front = 1;
     queue->rear = 0;
 }
 
@@ -35,7 +35,7 @@ ArrayQueue newQueue_AQ(int maxSize)
 {
     ArrayQueue queue = (ArrayQueue) malloc(sizeof(Queue_AQ));
     assert(queue != NULL);
-    queue->data = (DataType *) malloc(sizeof(DataType) * maxSize);
+    queue->data = (DataType_AQ *) malloc(sizeof(DataType_AQ) * maxSize);
     assert(queue != NULL);
     
     queue->capacity = maxSize;
@@ -50,7 +50,7 @@ static int succ(int value,ArrayQueue queue)
     return value;
 }
 
-bool enqueue_AQ(ArrayQueue queue, DataType data)
+bool enqueue_AQ(ArrayQueue queue, DataType_AQ data)
 {
     if (isFull_AQ(queue)) {
         printf("队列已满！");
@@ -71,13 +71,13 @@ void disposeQueue_AQ(ArrayQueue queue)
     }
 }
 
-DataType front_AQ(ArrayQueue queue)
+DataType_AQ front_AQ(ArrayQueue queue)
 {
     if (isEmpty_AQ(queue)) {
         printf("队列为空");
         return -1;
     }
-    return queue->data[queue->fornt];
+    return queue->data[queue->front];
 }
 
 bool dequeue_AQ(ArrayQueue queue)
@@ -88,11 +88,11 @@ bool dequeue_AQ(ArrayQueue queue)
     }
     
     queue->size--;
-    queue->fornt = succ(queue->fornt, queue);
+    queue->front = succ(queue->front, queue);
     return true;
 }
 
-DataType frontAndDequeue_AQ(ArrayQueue queue)
+DataType_AQ frontAndDequeue_AQ(ArrayQueue queue)
 {
     if (isEmpty_AQ(queue)) {
         printf("队列为空");
@@ -100,8 +100,8 @@ DataType frontAndDequeue_AQ(ArrayQueue queue)
     }
     
     queue->size--;
-    DataType tempCell = queue->data[queue->fornt];
-    queue->fornt = succ(queue->fornt, queue);
+    DataType_AQ tempCell = queue->data[queue->front];
+    queue->front = succ(queue->front, queue);
     
     return tempCell;
 }
@@ -123,12 +123,12 @@ void showQueue_AQ(ArrayQueue queue)
         return;
     }
     
-    if (queue->fornt < queue->rear) {
-        for (int i = queue->fornt; i <= queue->rear; i++) {
+    if (queue->front < queue->rear) {
+        for (int i = queue->front; i <= queue->rear; i++) {
             printf("%d\t", queue->data[i]);
         }
     } else {
-        for (int i = queue->fornt; i < (queue->capacity - 1); i++) {
+        for (int i = queue->front; i < (queue->capacity - 1); i++) {
             printf("%d\t", queue->data[i]);
         }
         

@@ -8,6 +8,9 @@
 
 #include "array_list.h"
 
+#define CASE_TYPE *(int*)
+#define PRINT_FMT(data) printf("%d\t", CASE_TYPE (data));
+
 ArrayListPtr newArrayList() {
     ArrayListPtr list = malloc(sizeof(ArrayList));
     assert(list);
@@ -46,7 +49,7 @@ bool destroy_AL(ArrayListPtr *listPtr) {
     return false;
 }
 
-bool get_AL(ArrayListPtr list, int index, DataType_AL *data) {
+bool findAndIntoData_AL(ArrayListPtr list, int index, DataType_AL *data) {
     if (index < 1 || index > list->length) {
         printf("out of array index!");
         return false;
@@ -54,6 +57,15 @@ bool get_AL(ArrayListPtr list, int index, DataType_AL *data) {
 
     *data = list->data[index - 1];
     return true;
+}
+
+DataType_AL get_AL(ArrayListPtr list, int index) {
+    if (index < 1 || index > list->length) {
+        printf("out of array index!");
+        return NULL;
+    }
+
+    return list->data[index-1];
 }
 
 bool isExist_AL(ArrayListPtr list, DataType_AL data) {
@@ -143,7 +155,7 @@ void showList_AL(ArrayListPtr list) {
 
     int i = 0;
     while (i < list->length) {
-        printf("%d\t", list->data[i]);
+        PRINT_FMT(list->data[i]);
         i++;
     }
     printf("\n\n");

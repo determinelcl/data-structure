@@ -11,7 +11,7 @@
 
 bool initStack_AS(ArrayStackPtr stack)
 {
-    stack->data = (DataType *) malloc(sizeof(DataType) * STACK_INIT_SIZE);
+    stack->data = (DataType_AS *) malloc(sizeof(DataType_AS) * STACK_INIT_SIZE);
     if (!stack->data) {
         printf("内存空间不足！");
         return false;
@@ -41,10 +41,10 @@ void pop_AS(ArrayStackPtr stack)
     stack->top--;
 }
 
-void push_AS(ArrayStackPtr stack, DataType data)
+void push_AS(ArrayStackPtr stack, DataType_AS data)
 {
     if (stack->top == (stack->size - 1)) {
-        stack->data = (DataType *) realloc(stack->data, (stack->size + STACKINCREACE) * sizeof(DataType));
+        stack->data = (DataType_AS *) realloc(stack->data, (stack->size + STACKINCREACE) * sizeof(DataType_AS));
         
         if (!stack->data) {
             printf("内存分配失败！");
@@ -57,7 +57,7 @@ void push_AS(ArrayStackPtr stack, DataType data)
     stack->data[++stack->top] = data;
 }
 
-DataType topAndPop_AS(ArrayStackPtr stack)
+DataType_AS topAndPop_AS(ArrayStackPtr stack)
 {
     if (isEmpty_AS(stack)) {
         printf("栈为空，无法弹出任何元素");
