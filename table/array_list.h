@@ -18,7 +18,7 @@ typedef void *DataType_AL;
 
 typedef struct {
     DataType_AL *data;
-    int length;
+    int size;
     int capacity;
 } ArrayList, *ArrayListPtr;
 
@@ -145,5 +145,50 @@ int size_AL(ArrayListPtr list);
  * @return 顺序表的容量
  */
 int capacity_AL(ArrayListPtr list);
+
+/**
+ * 将一个顺序表的元素拷贝到一个新的顺序表
+ *
+ * @param sourceList 源顺序表，将要被拷贝的顺序表
+ * @param resultList 目标顺序表，新的顺序表
+ */
+void copyToResultList_AL(ArrayListPtr sourceList, ArrayListPtr resultList);
+
+/**
+ * 合并两个顺序表，并将新的顺序表返回
+ *
+ * @param one 第一个顺序表
+ * @param another 第二个合并的顺序表
+ * @return 合并之后的顺序表
+ */
+ArrayListPtr merge_AL(ArrayListPtr one, ArrayListPtr another);
+
+/**
+ * 将第二个顺序表的数据放入到第一个顺序表之中，称之为合并顺序表
+ *
+ * @param one 第一个顺序表将会改变并包含第二个顺序表
+ * @param another 第二个顺序表将被合并的顺序表
+ * @return 合并成功返回true，否则返回true
+ */
+bool union_AL(ArrayListPtr one, ArrayListPtr another);
+
+/**
+ * 获取指定位置的前面一个位置的数据元素
+ *
+ * @param list 获取数据的顺序表
+ * @param pos 指定获取前驱元素的索引
+ * @return 指定索引位置的数据元素的前驱元素
+ */
+DataType_AL previous_AL(ArrayListPtr list, int pos);
+
+
+/**
+ * 获取指定索引位置的下一个数据元素
+ *
+ * @param list 指定获取元素的顺序表
+ * @param pos 指定获取后继元素的索引
+ * @return 指定索引位置的数据元素的后继元素
+ */
+DataType_AL advance_AL(ArrayListPtr list, int pos);
 
 #endif /* array_list_h */

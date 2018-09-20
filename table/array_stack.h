@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #define STACK_INIT_SIZE 10
-#define STACKINCREACE 10
-#define EMPTY (-1)
+#define STACK_INCREASE 10
+#define EMPTY_OF_DATA (-1)
 
 typedef int  DataType_AS;
 typedef struct StackRecord{
@@ -30,8 +30,8 @@ void pop_AS(ArrayStackPtr stack);
 void push_AS(ArrayStackPtr stack, DataType_AS data);
 DataType_AS topAndPop_AS(ArrayStackPtr stack);
 void clear_AS(ArrayStackPtr stack);
-void destory_AS(ArrayStackPtr stack);
-int capcity_AS(ArrayStackPtr stack);
+void destroy_AS(ArrayStackPtr stack);
+int capacity_AS(ArrayStackPtr stack);
 int size_AS(ArrayStackPtr stack);
 void showStack_AS(ArrayStackPtr stack);
 

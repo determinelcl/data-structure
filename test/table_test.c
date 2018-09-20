@@ -93,6 +93,32 @@ void testArrayList(void) {
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
     showList_AL(&arrayList);
 
+    int pos = 2;
+    printf("顺序表的第%d个元素的前驱元素：%d，后继元素：%d\n\n", pos,
+            *(int *)previous_AL(&arrayList, pos), *(int *)advance_AL(&arrayList, pos));
+    showList_AL(&arrayList);
+
+    printf("创建一个新的顺序表，并为之添加5个元素：\n");
+    ArrayListPtr anotherList = newArrayList();
+    int anotherTempData[5] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < 5; i++) {
+        add_AL(anotherList, &anotherTempData[i]);
+    }
+    printf("新的一个顺序表容量 = %d, 新的一个元素个数 = %d\n", capacity_AL(anotherList), size_AL(anotherList));
+    showList_AL(anotherList);
+
+    printf("将新的顺序表与旧的顺序表合并，得到一个第三个新顺序表：\n");
+    ArrayListPtr thiredList = merge_AL(&arrayList, anotherList);
+    printf("新的三个顺序表容量 = %d, 新的三个顺序表元素个数 = %d\n", capacity_AL(anotherList), size_AL(anotherList));
+    showList_AL(thiredList);
+
+    printf("将第二个顺序表合并到旧的顺序表合并：\n");
+    union_AL(&arrayList, anotherList);
+    printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
+    showList_AL(&arrayList);
+    printf("第二个顺序表的元素为：\n");
+    showList_AL(anotherList);
+
     puts("\n");
 }
 
@@ -309,13 +335,13 @@ void testArrayStack(void) {
     printf("初始化栈%s\n", initStack_AS(stack) ? "成功" : "失败");
     printf("存放元素\n");
 
-    printf("栈的目前容量为：%d\n", capcity_AS(stack));
+    printf("栈的目前容量为：%d\n", capacity_AS(stack));
 
     for (int i = 0; i < 15; i++) {
         push_AS(stack, i + 1);
     }
 
-    printf("栈的目前容量为：%d\n", capcity_AS(stack));
+    printf("栈的目前容量为：%d\n", capacity_AS(stack));
     printf("栈的元素个数是：%d\n", size_AS(stack));
     printf("栈中的元素是：\n");
     showStack_AS(stack);
@@ -337,7 +363,7 @@ void testArrayStack(void) {
     printf("栈中的元素是：\n");
     showStack_AS(stack);
     printf("栈%s\n", isEmpty_AS(stack) ? "为空" : "不为空");
-    printf("栈的目前容量为：%d\n", capcity_AS(stack));
+    printf("栈的目前容量为：%d\n", capacity_AS(stack));
 
     printf("向栈中存放元素\n");
     for (int i = 0; i < 15; i++) {
@@ -346,10 +372,10 @@ void testArrayStack(void) {
     printf("栈中的元素是：\n");
     showStack_AS(stack);
     printf("栈%s\n", isEmpty_AS(stack) ? "为空" : "不为空");
-    printf("栈的目前容量为：%d\n", capcity_AS(stack));
+    printf("栈的目前容量为：%d\n", capacity_AS(stack));
 
     printf("销毁栈\n");
-    destory_AS(stack);
+    destroy_AS(stack);
 
     puts("\n");
 }

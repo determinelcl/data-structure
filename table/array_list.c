@@ -24,7 +24,7 @@ bool initArrayList(ArrayListPtr list) {
 
     assert(list->data);
 
-    list->length = 0;
+    list->size = 0;
     list->capacity = MAXSIZE;
     return true;
 }
@@ -34,14 +34,14 @@ bool clear_AL(ArrayListPtr list) {
         return false;
     }
 
-    list->length = 0;
+    list->size = 0;
     return true;
 }
 
 bool destroy_AL(ArrayListPtr *listPtr) {
     if ((*listPtr)->data) {
         free((*listPtr)->data);
-        (*listPtr)->length = 0;
+        (*listPtr)->size = 0;
         (*listPtr) = NULL;
         return true;
     }
@@ -50,7 +50,7 @@ bool destroy_AL(ArrayListPtr *listPtr) {
 }
 
 bool findAndIntoData_AL(ArrayListPtr list, int index, DataType_AL *data) {
-    if (index < 1 || index > list->length) {
+    if (index < 1 || index > list->size) {
         printf("out of array index!");
         return false;
     }
@@ -60,12 +60,12 @@ bool findAndIntoData_AL(ArrayListPtr list, int index, DataType_AL *data) {
 }
 
 DataType_AL get_AL(ArrayListPtr list, int index) {
-    if (index < 1 || index > list->length) {
+    if (index < 1 || index > list->size) {
         printf("out of array index!");
         return NULL;
     }
 
-    return list->data[index-1];
+    return list->data[index - 1];
 }
 
 bool isExist_AL(ArrayListPtr list, DataType_AL data) {
@@ -74,7 +74,7 @@ bool isExist_AL(ArrayListPtr list, DataType_AL data) {
     }
 
     int i = 0;
-    while (i < list->length) {
+    while (i < list->size) {
         if (list->data[i] == data) {
             return true;
         }
@@ -85,12 +85,12 @@ bool isExist_AL(ArrayListPtr list, DataType_AL data) {
 }
 
 bool isEmpty_AL(ArrayListPtr list) {
-    return list->length == 0;
+    return list->size == 0;
 }
 
 
 bool add_AL(ArrayListPtr list, DataType_AL data) {
-    if (list->length == list->capacity) {
+    if (list->size == list->capacity) {
         DataType_AL *newData = (DataType_AL *) realloc(list->data,
                                                        (list->capacity + INCREMENT) * sizeof(DataType_AL));
         assert(newData);
@@ -99,21 +99,21 @@ bool add_AL(ArrayListPtr list, DataType_AL data) {
         list->capacity += INCREMENT;
     }
 
-    list->data[list->length] = data;
-    list->length++;
+    list->data[list->size] = data;
+    list->size++;
     return true;
 }
 
 bool insert_AL(ArrayListPtr list, int index, DataType_AL data) {
     DataType_AL *newData;
 
-    if (index < 1 || index > list->length + 1)   // 只能插入第一个位置和顺序表尾部
+    if (index < 1 || index > list->size + 1)   // 只能插入第一个位置和顺序表尾部
     {
         printf("out of array index!");
         return false;
     }
 
-    if (list->length == list->capacity)   // 如果当前元素个数等于最大容量，则需要扩容
+    if (list->size == list->capacity)   // 如果当前元素个数等于最大容量，则需要扩容
     {
         newData = (DataType_AL *) realloc(list->data,
                                           (list->capacity + INCREMENT) * sizeof(DataType_AL));
@@ -124,28 +124,29 @@ bool insert_AL(ArrayListPtr list, int index, DataType_AL data) {
     }
 
     // 执行元素后移
-    for (int i = list->length - 1; i >= index - 1; i--) {
+    for (int i = list->size - 1; i >= index - 1; i--) {
         list->data[i + 1] = list->data[i];
     }
 
     list->data[index - 1] = data;
-    list->length++;
+    list->size++;
     return true;
 }
 
 bool remove_AL(ArrayListPtr list, int index, DataType_AL *data) {
-    if (index < 1 || index > list->length) {
+    if (index < 1 || index > list->size) {
         printf("out of array index !");
         return false;
     }
 
     *data = list->data[index - 1];
 
-    for (int i = index - 1; i < list->length; i++) {
-        list->data[i] = list->data[i + 1];// 前移操作
+    // 执行操作前移
+    for (int i = index - 1; i < list->size; i++) {
+        list->data[i] = list->data[i + 1];
     }
 
-    list->length--;
+    list->size--;
     return true;
 }
 
@@ -154,7 +155,7 @@ void showList_AL(ArrayListPtr list) {
     if (!list) return;
 
     int i = 0;
-    while (i < list->length) {
+    while (i < list->size) {
         PRINT_FMT(list->data[i]);
         i++;
     }
@@ -163,10 +164,56 @@ void showList_AL(ArrayListPtr list) {
 
 int size_AL(ArrayListPtr list) {
     assert(list);
-    return list->length;
+    return list->size;
 }
 
 int capacity_AL(ArrayListPtr list) {
     assert(list);
     return list->capacity;
 }
+
+
+ArrayListPtr merge_AL(ArrayListPtr one, ArrayListPtr another) {
+    ArrayListPtr resultList = newArrayList();
+
+    copyToResultList_AL(one, resultList);
+    copyToResultList_AL(another, resultList);
+    return resultList;
+}
+
+void copyToResultList_AL(ArrayListPtr sourceList, ArrayListPtr resultList) {
+    assert(sourceList);
+    assert(resultList);
+
+    for (int i = 0; i < sourceList->size; i++) {
+        add_AL(resultList, sourceList->data[i]);
+    }
+}
+
+bool union_AL(ArrayListPtr one, ArrayListPtr another) {
+    assert(one);
+
+    if (another == NULL){
+        fputs("要合并的顺序表为NULL", stderr);
+        return false;
+    }
+
+    copyToResultList_AL(another, one);
+    return true;
+}
+
+DataType_AL previous_AL(ArrayListPtr list, int pos) {
+    assert(list);
+    assert(pos >= 2 && pos <= list->size);
+
+    int currentPos = pos - 1;
+    return list->data[currentPos - 1];
+}
+
+DataType_AL advance_AL(ArrayListPtr list, int pos) {
+    assert(list);
+    assert(pos >= 1 && pos < list->size);
+
+    return list->data[pos];
+}
+

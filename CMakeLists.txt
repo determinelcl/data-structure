@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 project(hello C)
 
 set(CMAKE_C_STANDARD 11)
@@ -18,7 +18,8 @@ set(TABLE_ADT   table/array_list.h      table/array_list.c
 set(TREE_ADT    tree/binary_tree.h      tree/binary_tree.c
                 tree/search_tree.h      tree/search_tree.c
                 tree/avl_tree.h         tree/avl_tree.c
-                tree/tree_generic.h                         )
+                tree/tree_generic.h
+                tree/seq_bi_tree.h      tree/seq_bi_tree.c)
 
 set(TEST_ADT    test/table_test.h       test/table_test.c
                 test/tree_test.h        test/tree_test.c)

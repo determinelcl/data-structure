@@ -23,12 +23,12 @@ bool initStack_AS(ArrayStackPtr stack)
 
 void makeEmpty_AS(ArrayStackPtr stack)
 {
-    stack->top = EMPTY;
+    stack->top = EMPTY_OF_DATA;
 }
 
 bool isEmpty_AS(ArrayStackPtr stack)
 {
-    return stack->top == EMPTY;
+    return stack->top == EMPTY_OF_DATA;
 }
 
 void pop_AS(ArrayStackPtr stack)
@@ -44,14 +44,14 @@ void pop_AS(ArrayStackPtr stack)
 void push_AS(ArrayStackPtr stack, DataType_AS data)
 {
     if (stack->top == (stack->size - 1)) {
-        stack->data = (DataType_AS *) realloc(stack->data, (stack->size + STACKINCREACE) * sizeof(DataType_AS));
+        stack->data = (DataType_AS *) realloc(stack->data, (stack->size + STACK_INCREASE) * sizeof(DataType_AS));
         
         if (!stack->data) {
             printf("内存分配失败！");
             return;
         }
         
-        stack->size += STACKINCREACE;
+        stack->size += STACK_INCREASE;
     }
     
     stack->data[++stack->top] = data;
@@ -72,7 +72,7 @@ void clear_AS(ArrayStackPtr stack)
     makeEmpty_AS(stack);
 }
 
-void destory_AS(ArrayStackPtr stack)
+void destroy_AS(ArrayStackPtr stack)
 {
     if (stack) {
         free(stack->data);
@@ -80,7 +80,7 @@ void destory_AS(ArrayStackPtr stack)
     }
 }
 
-int capcity_AS(ArrayStackPtr stack)
+int capacity_AS(ArrayStackPtr stack)
 {
     return stack->size;
 }
