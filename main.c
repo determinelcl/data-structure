@@ -17,6 +17,7 @@ int main() {
     testBinary_Tree();
     testSearchTree();
     testAvlTree();
+    testSeqBinaryTree();
     printf("Hello, World!\n");
     return 0;
 }

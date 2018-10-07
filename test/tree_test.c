@@ -222,3 +222,48 @@ void testAvlTree(void) {
     printf("AVL平衡树的高度为：%d\n", height_AVLT(tree));
     puts("\n");
 }
+
+void testSeqBinaryTree(void) {
+    printf("*****************************************************\n");
+    printf("*                 二叉树顺序存储测试例程               *\n");
+    printf("*****************************************************\n");
+
+
+    const int maxSize = 10;
+    printf("创建顺序存储二叉树, 最大容量为%d，并向二叉树中填充数据元素！\n", maxSize);
+    SeqBinaryTree binaryTree = newSeqBinaryTree(maxSize);
+    for (int i = 0; i < maxSize; ++i) {
+        add_SBT(binaryTree, i + 1);
+    }
+
+    printf("顺序存储二叉树的数据元素的个数为：%d\n", size_SBT(binaryTree));
+    printf("顺序存储二叉树的容量为：%d\n", capacity_SBT(binaryTree));
+    printf("顺序存储二叉树的根元素为：%d\n", root_SBT(binaryTree));
+    printf("顺序存储二叉树的深度为：%d\n\n", depth_SBT(binaryTree));
+
+    printf("先序遍历：\n");
+    preTraversal_SBT(binaryTree);
+    puts("\n");
+    printf("中序遍历：\n");
+    middleTraversal_SBT(binaryTree);
+    puts("\n");
+    printf("后序遍历：\n");
+    behindTraversal_SBT(binaryTree);
+    puts("\n");
+    printf("层序遍历：\n");
+    levelTraversal_SBT(binaryTree);
+    puts("\n");
+
+    const int num1 = 10;
+    const int num2 = 11;
+    printf("顺序存储二叉树中\n");
+    DataType_SBT parentOfNum = parent_SBT(binaryTree, num1);
+    printf("元素%d和%d的父节点分别为：%d和%d\n", num1, num2, parentOfNum, parent_SBT(binaryTree, num2));
+    printf("元素%d的右子节点元素为：%d\n", parentOfNum, rightChild_SBT(binaryTree, parentOfNum));
+    printf("元素%d的左子节点元素为：%d\n", parentOfNum, leftChild_SBT(binaryTree, parentOfNum));
+    printf("元素%d的左兄弟节点元素为：%d\n", num1, leftSibling_SBT(binaryTree, num1));
+    printf("元素%d的右兄弟节点元素为：%d\n", num2, rightSibling_SBT(binaryTree, num2));
+
+
+    puts("\n");
+}
