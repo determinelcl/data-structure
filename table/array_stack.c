@@ -23,12 +23,12 @@ bool initStack_AS(ArrayStackPtr stack)
 
 void makeEmpty_AS(ArrayStackPtr stack)
 {
-    stack->top = EMPTY_OF_DATA_SBT;
+    stack->top = EMPTY_OF_DATA_AS;
 }
 
 bool isEmpty_AS(ArrayStackPtr stack)
 {
-    return stack->top == EMPTY_OF_DATA_SBT;
+    return stack->top == EMPTY_OF_DATA_AS;
 }
 
 void pop_AS(ArrayStackPtr stack)

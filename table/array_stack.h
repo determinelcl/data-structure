@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #define STACK_INIT_SIZE 10
 #define STACK_INCREASE 10
-#define EMPTY_OF_DATA_SBT (-1)
+#define EMPTY_OF_DATA_AS (-1)
 
 typedef int  DataType_AS;
 typedef struct StackRecord{

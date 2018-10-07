@@ -4,7 +4,7 @@
 
 #include "binary_tree.h"
 
-#define EMPTY_OF_DATA_SBT 0
+#define EMPTY_OF_DATA_BT 0
 
 
 BinaryTree newBinaryTree() {
@@ -12,7 +12,7 @@ BinaryTree newBinaryTree() {
     assert(tree != NULL);
 
     tree->root = NULL;
-    tree->size = EMPTY_OF_DATA_SBT;
+    tree->size = EMPTY_OF_DATA_BT;
 
     return tree;
 }
@@ -23,7 +23,7 @@ static void initTreeNode(PtrToNode_BT node) {
 }
 
 bool isEmpty_BT(BinaryTree tree) {
-    return tree->size == EMPTY_OF_DATA_SBT;
+    return tree->size == EMPTY_OF_DATA_BT;
 }
 
 static PtrToNode_BT createNode_BT() {
@@ -92,7 +92,7 @@ static void pTraversal_BT(PtrToNode_BT tree) {
 }
 
 void preTraversal_BT(BinaryTree tree) {
-    if (tree == NULL || tree->size == EMPTY_OF_DATA_SBT) return;
+    if (tree == NULL || tree->size == EMPTY_OF_DATA_BT) return;
     pTraversal_BT(tree->root);
     printf("\n\n");
 }
@@ -105,7 +105,7 @@ static void mTraversal_BT(PtrToNode_BT tree) {
 }
 
 void middleTraversal_BT(BinaryTree tree) {
-    if (tree == NULL || tree->size == EMPTY_OF_DATA_SBT) return;
+    if (tree == NULL || tree->size == EMPTY_OF_DATA_BT) return;
     mTraversal_BT(tree->root);
     printf("\n\n");
 }
@@ -118,13 +118,13 @@ static void beTraversal_BT(PtrToNode_BT tree) {
 }
 
 void behindTraversal_BT(BinaryTree tree) {
-    if (tree == NULL || tree->size == EMPTY_OF_DATA_SBT) return;
+    if (tree == NULL || tree->size == EMPTY_OF_DATA_BT) return;
     beTraversal_BT(tree->root);
     printf("\n\n");
 }
 
 void levelTraversal_BT(BinaryTree tree) {
-    if (tree == NULL || tree->size == EMPTY_OF_DATA_SBT) return;
+    if (tree == NULL || tree->size == EMPTY_OF_DATA_BT) return;
 
     LinkedQueue queue = newLinkedQueue();
 
