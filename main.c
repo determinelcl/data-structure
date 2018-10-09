@@ -18,6 +18,7 @@ int main() {
     testSearchTree();
     testAvlTree();
     testSeqBinaryTree();
+    testHuffmanTree();
     printf("Hello, World!\n");
     return 0;
 }

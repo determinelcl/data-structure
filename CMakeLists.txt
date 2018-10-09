@@ -19,7 +19,8 @@ set(TREE_ADT    tree/binary_tree.h      tree/binary_tree.c
                 tree/search_tree.h      tree/search_tree.c
                 tree/avl_tree.h         tree/avl_tree.c
                 tree/tree_generic.h
-                tree/seq_bi_tree.h      tree/seq_bi_tree.c)
+                tree/seq_bi_tree.h      tree/seq_bi_tree.c
+                tree/huffman_tree.h     tree/huffman_tree.c)
 
 set(TEST_ADT    test/table_test.h       test/table_test.c
                 test/tree_test.h        test/tree_test.c)

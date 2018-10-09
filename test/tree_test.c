@@ -254,8 +254,8 @@ void testSeqBinaryTree(void) {
     levelTraversal_SBT(binaryTree);
     puts("\n");
 
-    const int num1 = 10;
-    const int num2 = 11;
+    const int num1 = 7;
+    const int num2 = 6;
     printf("顺序存储二叉树中\n");
     DataType_SBT parentOfNum = parent_SBT(binaryTree, num1);
     printf("元素%d和%d的父节点分别为：%d和%d\n", num1, num2, parentOfNum, parent_SBT(binaryTree, num2));
@@ -263,7 +263,31 @@ void testSeqBinaryTree(void) {
     printf("元素%d的左子节点元素为：%d\n", parentOfNum, leftChild_SBT(binaryTree, parentOfNum));
     printf("元素%d的左兄弟节点元素为：%d\n", num1, leftSibling_SBT(binaryTree, num1));
     printf("元素%d的右兄弟节点元素为：%d\n", num2, rightSibling_SBT(binaryTree, num2));
+    printf("元素%d的右兄弟节点元素是否存在：%s\n", num2, isExist_SBT(binaryTree, num2) ? "存在" : "不存在");
 
 
     puts("\n");
+}
+
+void testHuffmanTree() {
+    HuffmanTree tree;
+
+    DataType data[N_HT + 1] = {[1]='a', 'b', 'c', 'd'};
+    unsigned weight[N_HT + 1] = {[1]=30, 5, 10, 20};
+
+    // 构建哈夫曼编码表
+    createHuffmanTree(tree, weight, N_HT);
+    printHuffmanTree_HT(tree, data);
+
+    HuffmanCode huffmanCode;
+    encodingHuffmanCode_HT(tree, huffmanCode);
+    printHuffmanCoding_HT(huffmanCode, data);
+
+
+    char *testDecodingStr = "01000101101110";
+    int testDecodingStrLen = 14;
+    printf("编码%s对应的字符串是：", testDecodingStr);
+    char result[30];
+    decodingHuffmanCode_HT(tree, data, testDecodingStr, testDecodingStrLen, result);
+    printf("%s\n", result);
 }
