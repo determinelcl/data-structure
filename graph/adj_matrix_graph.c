@@ -34,6 +34,7 @@ MatrixGraph newEmptyMatrixGraph(int countOfVertex, int countOfEdge);
  */
 void putVertexIntoMatrix(MatrixGraph matrixGraph, Vertex_AMG vertex, int countOfVertex);
 
+
 MatrixGraph createAdjacencyMatrix(
         Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge, GraphKind kind) {
 
