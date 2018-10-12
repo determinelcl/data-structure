@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "table_test.h"
 #include "tree_test.h"
+#include "graph_test.h"
 
 
 int main() {
@@ -19,6 +20,8 @@ int main() {
     testAvlTree();
     testSeqBinaryTree();
     testHuffmanTree();
+
+    testAdjMatrixGrpah();
     printf("Hello, World!\n");
     return 0;
 }

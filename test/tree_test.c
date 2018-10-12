@@ -270,6 +270,10 @@ void testSeqBinaryTree(void) {
 }
 
 void testHuffmanTree() {
+    printf("*****************************************************\n");
+    printf("*                  哈夫曼数测试例程                   *\n");
+    printf("*****************************************************\n");
+
     HuffmanTree tree;
 
     DataType data[N_HT + 1] = {[1]='a', 'b', 'c', 'd'};
@@ -290,4 +294,6 @@ void testHuffmanTree() {
     char result[30];
     decodingHuffmanCode_HT(tree, data, testDecodingStr, testDecodingStrLen, result);
     printf("%s\n", result);
+
+    puts("\n");
 }
