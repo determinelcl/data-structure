@@ -4,7 +4,9 @@ project(hello C)
 set(CMAKE_C_STANDARD 11)
 
 include_directories(table test tree graph)
-set(GRAPH_ADT   graph/adj_matrix_graph.h    graph/adj_matrix_graph.c)
+set(GRAPH_ADT   graph/adj_matrix_graph.h    graph/adj_matrix_graph.c
+                graph/adj_table_graph.h     graph/adj_table_graph.c
+                graph/graph_generic.h)
 
 set(TABLE_ADT   table/array_list.h          table/array_list.c
                 table/linked_list.h         table/linked_list.c

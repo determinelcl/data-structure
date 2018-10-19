@@ -21,7 +21,8 @@ int main() {
     testSeqBinaryTree();
     testHuffmanTree();
 
-    testAdjMatrixGrpah();
+    testAdjMatrixGraph();
+    testAdjTableGraph();
     printf("Hello, World!\n");
     return 0;
 }

@@ -7,22 +7,22 @@
 /**
  * 创建有向图
  */
-MatrixGraph createDG(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge);
+MatrixGraph createDG(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge);
 
 /**
  * 创建有向网
  */
-MatrixGraph createDN(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge);
+MatrixGraph createDN(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge);
 
 /**
  * 创建无向网
  */
-MatrixGraph createUDG(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge);
+MatrixGraph createUDG(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge);
 
 /**
  * 创建无向网
  */
-MatrixGraph createUDN(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge);
+MatrixGraph createUDN(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge);
 
 /**
  * 创建空的邻接矩阵
@@ -32,11 +32,11 @@ MatrixGraph newEmptyMatrixGraph(int countOfVertex, int countOfEdge);
 /**
  * 将顶点放入到邻接矩阵中
  */
-void putVertexIntoMatrix(MatrixGraph matrixGraph, Vertex_AMG vertex, int countOfVertex);
+void putVertexIntoMatrix(MatrixGraph matrixGraph, Vertices vertex, int countOfVertex);
 
 
 MatrixGraph createAdjacencyMatrix(
-        Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge, GraphKind kind) {
+        Vertices vertex, Edges edge, int countOfVertex, int countOfEdge, GraphKind kind) {
 
     switch (kind) {
         case DG:    // 有向图
@@ -71,7 +71,7 @@ MatrixGraph newEmptyMatrixGraph(int countOfVertex, int countOfEdge) {
     // 初始化矩阵
     for (int i = 0; i < countOfVertex; ++i) {
         for (int j = 0; j < countOfVertex; ++j) {
-            matrixGraph->matrix[i][j] = MATRIX_UNFLAG_AMG;
+            matrixGraph->matrix[i][j] = UNFLAG_WEIGHT_GRAPH;
         }
     }
 
@@ -79,7 +79,7 @@ MatrixGraph newEmptyMatrixGraph(int countOfVertex, int countOfEdge) {
 }
 
 
-MatrixGraph createDG(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge) {
+MatrixGraph createDG(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge) {
     if (countOfVertex <= 0) return NULL;
     MatrixGraph matrixGraph = newEmptyMatrixGraph(countOfVertex, countOfEdge);
     matrixGraph->kind = DG;
@@ -94,7 +94,7 @@ MatrixGraph createDG(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int co
     return matrixGraph;
 }
 
-MatrixGraph createDN(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge) {
+MatrixGraph createDN(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge) {
     if (countOfVertex <= 0) return NULL;
     MatrixGraph matrixGraph = newEmptyMatrixGraph(countOfVertex, countOfEdge);
     matrixGraph->kind = DN;
@@ -108,7 +108,7 @@ MatrixGraph createDN(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int co
     return matrixGraph;
 }
 
-MatrixGraph createUDG(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge) {
+MatrixGraph createUDG(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge) {
     if (countOfVertex <= 0) return NULL;
     MatrixGraph matrixGraph = newEmptyMatrixGraph(countOfVertex, countOfEdge);
     matrixGraph->kind = UDG;
@@ -123,7 +123,7 @@ MatrixGraph createUDG(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int c
     return matrixGraph;
 }
 
-MatrixGraph createUDN(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int countOfEdge) {
+MatrixGraph createUDN(Vertices vertex, Edges edge, int countOfVertex, int countOfEdge) {
     if (countOfVertex <= 0) return NULL;
     MatrixGraph matrixGraph = newEmptyMatrixGraph(countOfVertex, countOfEdge);
     matrixGraph->kind = UDN;
@@ -138,13 +138,13 @@ MatrixGraph createUDN(Vertex_AMG vertex, Edge_AMG edge, int countOfVertex, int c
     return matrixGraph;
 }
 
-void putVertexIntoMatrix(MatrixGraph matrixGraph, Vertex_AMG vertex, int countOfVertex) {// 存放顶点到邻接矩阵
+void putVertexIntoMatrix(MatrixGraph matrixGraph, Vertices vertex, int countOfVertex) {// 存放顶点到邻接矩阵
     for (int i = 0; i < countOfVertex; ++i) {
         matrixGraph->vertex[i] = vertex[i];
     }
 }
 
-void newEdgeForGraphVertex(MatrixGraph matrixGraph, Edge_AMG edge, int countOfEdge) {
+void newEdgeForGraphVertex_AMG(MatrixGraph matrixGraph, Edges edge, int countOfEdge) {
     assert(matrixGraph);
     assert(matrixGraph->vertex);
 
@@ -171,7 +171,7 @@ void newEdgeForGraphVertex(MatrixGraph matrixGraph, Edge_AMG edge, int countOfEd
     }
 }
 
-void showMatrixGraph(MatrixGraph matrixGraph) {
+void showMatrixGraph_AMG(MatrixGraph matrixGraph) {
     assert(matrixGraph);
     assert(matrixGraph->vertex);
 
@@ -190,9 +190,9 @@ void showMatrixGraph(MatrixGraph matrixGraph) {
 
             // 判定如果是图，则是矩阵空则为0，如果是网，则是矩阵空为∞
             if (matrixGraph->kind == DG || matrixGraph->kind == UDG)
-                fprintf(stdout, "%d\t", value != MATRIX_UNFLAG_AMG ? value : 0);
+                fprintf(stdout, "%d\t", value != UNFLAG_WEIGHT_GRAPH ? value : 0);
             else {
-                if (value == MATRIX_UNFLAG_AMG)
+                if (value == UNFLAG_WEIGHT_GRAPH)
                     fprintf(stdout, "∞\t");
                 else fprintf(stdout, "%d\t", value);
             }

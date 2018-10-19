@@ -6,7 +6,9 @@
 #define HELLO_GRAPH_TEST_H
 
 #include "adj_matrix_graph.h"
+#include "adj_table_graph.h"
 
-void testAdjMatrixGrpah(void);
+void testAdjMatrixGraph(void);
+void testAdjTableGraph(void);
 
 #endif //HELLO_GRAPH_TEST_H
