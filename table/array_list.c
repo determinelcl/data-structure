@@ -73,12 +73,8 @@ bool isExist_AL(ArrayListPtr list, DataType_AL data) {
         return false;
     }
 
-    int i = 0;
-    while (i < list->size) {
-        if (list->data[i] == data) {
-            return true;
-        }
-        i++;
+    for (int i = 0; i < list->size; i++) {
+        if (CASE_TYPE (list->data[i]) == CASE_TYPE (data)) return true;
     }
 
     return false;
@@ -193,7 +189,7 @@ void copyToResultList_AL(ArrayListPtr sourceList, ArrayListPtr resultList) {
 bool union_AL(ArrayListPtr one, ArrayListPtr another) {
     assert(one);
 
-    if (another == NULL){
+    if (another == NULL) {
         fputs("要合并的顺序表为NULL", stderr);
         return false;
     }

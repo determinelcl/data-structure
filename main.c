@@ -23,6 +23,7 @@ int main() {
 
     testAdjMatrixGraph();
     testAdjTableGraph();
+    testCrossListGraph();
     printf("Hello, World!\n");
     return 0;
 }

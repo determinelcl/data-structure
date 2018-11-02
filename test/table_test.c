@@ -63,6 +63,12 @@ void testArrayList(void) {
     printf("删除之后的元素序列为：\n");
     showList_AL(&arrayList);
 
+    int addNum = 28;
+    printf("插入一个元素：%d\n", addNum);
+    insert_AL(&arrayList, 1, &addNum);
+    printf("插入之后的元素序列为：\n");
+    showList_AL(&arrayList);
+
     printf("执行清空之后:\n");
     clear_AL(&arrayList);
     printf("顺序表容量 = %d, 元素个数 = %d\n", capacity_AL(&arrayList), size_AL(&arrayList));
@@ -108,9 +114,9 @@ void testArrayList(void) {
     showList_AL(anotherList);
 
     printf("将新的顺序表与旧的顺序表合并，得到一个第三个新顺序表：\n");
-    ArrayListPtr thiredList = merge_AL(&arrayList, anotherList);
+    ArrayListPtr thirdList = merge_AL(&arrayList, anotherList);
     printf("新的三个顺序表容量 = %d, 新的三个顺序表元素个数 = %d\n", capacity_AL(anotherList), size_AL(anotherList));
-    showList_AL(thiredList);
+    showList_AL(thirdList);
 
     printf("将第二个顺序表合并到旧的顺序表合并：\n");
     union_AL(&arrayList, anotherList);
