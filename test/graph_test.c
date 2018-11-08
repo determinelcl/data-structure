@@ -129,3 +129,29 @@ void testCrossListGraph(void) {
 
     puts("\n");
 }
+
+void testAdjMultipleTableGraph(void) {
+    printf("*****************************************************\n");
+    printf("*              多重邻接表存储结构图测试例程             *\n");
+    printf("*****************************************************\n");
+    const int VERTEX_SIZE = 5;
+    Vertices vertices = newVexTestCase(VERTEX_SIZE);
+
+    // [a, b, c, d, e]
+    Edges edges = newEdgeTestCase(VERTEX_SIZE);
+    AdjMultipleTableGraph tableGraph = newAdjMultipleTableGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, UDG);
+    showAdjMultipleTableGraph_AMTG(tableGraph);
+
+    edges = malloc(sizeof(EdgeType) * 2);
+    edges[0].vi = 1;
+    edges[0].vj = 3;
+    edges[0].weight = 60;
+
+    edges[1].vi = 3;
+    edges[1].vj = 2;
+    edges[1].weight = 90;
+    newEdgeForGraphVertex_AMTG(tableGraph, reAllocEdge(VERTEX_SIZE, edges), 2);
+    showAdjMultipleTableGraph_AMTG(tableGraph);
+
+    puts("\n");
+}

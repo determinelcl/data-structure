@@ -24,6 +24,7 @@ int main() {
     testAdjMatrixGraph();
     testAdjTableGraph();
     testCrossListGraph();
+    testAdjMultipleTableGraph();
     printf("Hello, World!\n");
     return 0;
 }

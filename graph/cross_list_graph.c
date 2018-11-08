@@ -111,8 +111,10 @@ bool newEdges_CLG(ClgGraph clgGraph, Edges edges, int countOfEdge, bool weightFl
         else {
             bool isConflict = false;
             while (edgeTmp->tLink) {
-                if (edgeTmp->tailVex == edgeNodeTmp->tailVex && edgeTmp->headVex == edgeNodeTmp->headVex)
+                if (edgeTmp->tailVex == edgeNodeTmp->tailVex && edgeTmp->headVex == edgeNodeTmp->headVex) {
                     isConflict = true;
+                    break;
+                }
                 edgeTmp = edgeTmp->tLink;
             }
 
@@ -131,8 +133,10 @@ bool newEdges_CLG(ClgGraph clgGraph, Edges edges, int countOfEdge, bool weightFl
         else {
             bool isConflict = false;
             while (edgeTmp->hLink) {
-                if (edgeTmp->tailVex == edgeNodeTmp->tailVex && edgeTmp->headVex == edgeNodeTmp->headVex)
+                if (edgeTmp->tailVex == edgeNodeTmp->tailVex && edgeTmp->headVex == edgeNodeTmp->headVex) {
                     isConflict = true;
+                    break;
+                }
                 edgeTmp = edgeTmp->hLink;
             }
 

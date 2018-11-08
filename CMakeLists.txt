@@ -7,7 +7,8 @@ include_directories(table test tree graph)
 set(GRAPH_ADT   graph/adj_matrix_graph.h    graph/adj_matrix_graph.c
                 graph/adj_table_graph.h     graph/adj_table_graph.c
                 graph/graph_generic.h
-                graph/cross_list_graph.c    graph/cross_list_graph.h)
+                graph/cross_list_graph.h    graph/cross_list_graph.c
+                graph/adj_mult_graph.h      graph/adj_mult_graph.c)
 
 set(TABLE_ADT   table/array_list.h          table/array_list.c
                 table/linked_list.h         table/linked_list.c
