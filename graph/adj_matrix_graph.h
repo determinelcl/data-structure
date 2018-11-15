@@ -43,5 +43,18 @@ void newEdgeForGraphVertex_AMG(MatrixGraph matrixGraph, Edges edge, int countOfE
  */
 void showMatrixGraph_AMG(MatrixGraph matrixGraph);
 
+/**
+ * 深度优先遍历图
+ *
+ * @param matrixGraph 需要遍历的图
+ */
+void dfsTraversal_AMG(MatrixGraph matrixGraph);
+
+/**
+ * 广度优先遍历图
+ *
+ * @param matrixGraph 需要遍历的图
+ */
+void bfsTraversal_AMG(MatrixGraph matrixGraph);
 
 #endif //HELLO_ADJ_MATRIX_GRAPH_H

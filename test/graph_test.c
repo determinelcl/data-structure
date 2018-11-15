@@ -8,7 +8,7 @@ Vertices newVexTestCase(int VERTEX_SIZE);
 
 Edges newEdgeTestCase(int VERTEX_SIZE);
 
-Edges reAllocEdge(const int VERTEX_SIZE, Edges edges);
+Edges reAllocEdge(int VERTEX_SIZE, Edges edges);
 
 void testAdjMatrixGraph() {
     printf("*****************************************************\n");
@@ -21,13 +21,19 @@ void testAdjMatrixGraph() {
     // [a, b, c, d, e]
     Edges edge = newEdgeTestCase(VERTEX_SIZE);
 
-    MatrixGraph matrix = createAdjacencyMatrix(vertex, edge, VERTEX_SIZE, VERTEX_SIZE, UDN);
+    MatrixGraph matrix = createAdjacencyMatrix(vertex, edge, VERTEX_SIZE, VERTEX_SIZE, DG);
     showMatrixGraph_AMG(matrix);
 
     edge = reAllocEdge(VERTEX_SIZE, edge);
 
     newEdgeForGraphVertex_AMG(matrix, edge, VERTEX_SIZE + 2);
     showMatrixGraph_AMG(matrix);
+
+    printf("深度优先遍历的结果：\n");
+    dfsTraversal_AMG(matrix);
+
+    printf("广度优先遍历的结果：\n");
+    bfsTraversal_AMG(matrix);
     puts("\n");
 }
 

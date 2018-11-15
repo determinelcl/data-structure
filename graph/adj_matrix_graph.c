@@ -3,6 +3,7 @@
 //
 
 #include "adj_matrix_graph.h"
+#include "array_queue_o.h"
 
 /**
  * 创建有向图
@@ -34,6 +35,7 @@ MatrixGraph newEmptyMatrixGraph(int countOfVertex, int countOfEdge);
  */
 void putVertexIntoMatrix(MatrixGraph matrixGraph, Vertices vertex, int countOfVertex);
 
+void dfs_AMG(MatrixGraph matrixGraph, bool *markFlag, int index);
 
 MatrixGraph createAdjacencyMatrix(
         Vertices vertex, Edges edge, int countOfVertex, int countOfEdge, GraphKind kind) {
@@ -201,4 +203,63 @@ void showMatrixGraph_AMG(MatrixGraph matrixGraph) {
     }
 
     puts("\n");
+}
+
+
+void dfsTraversal_AMG(MatrixGraph matrixGraph) {
+    assert(matrixGraph);
+
+    // 用于标记被访问的节点
+    bool markFlag[matrixGraph->vexNum];
+    for (int i = 0; i < matrixGraph->vexNum; i++)
+        markFlag[i] = false;
+
+
+    // 设置节点被访问标志的顺序
+    for (int i = 0; i < matrixGraph->vexNum; i++) {
+        if (markFlag[i]) continue;
+        dfs_AMG(matrixGraph, markFlag, i);
+    }
+
+    fprintf(stdout, "\n\n");
+}
+
+void dfs_AMG(MatrixGraph matrixGraph, bool *markFlag, int index) {
+    markFlag[index] = true;
+    printf("%c\t", matrixGraph->vertex[index]);
+
+    for (int i = 0; i < matrixGraph->vexNum; i++) {
+        if (matrixGraph->matrix[index][i] != UNFLAG_WEIGHT_GRAPH && !markFlag[i])
+            dfs_AMG(matrixGraph, markFlag, i);
+    }
+}
+
+void bfsTraversal_AMG(MatrixGraph matrixGraph) {
+    ArrayQueue queue = newQueue_AQ(matrixGraph->vexNum + 2);
+    bool markFlag[matrixGraph->vexNum];
+    for (int i = 0; i < matrixGraph->vexNum; i++)
+        markFlag[i] = false;
+
+    for (int i = 0; i < matrixGraph->vexNum; i++) {
+        if (markFlag[i]) continue;
+
+        markFlag[i] = true;
+        printf("%c\t", matrixGraph->vertex[i]);
+        enqueue_AQ(queue, i);
+
+
+        while (!isEmpty_AQ(queue)) {
+            int vexIndex = frontAndDequeue_AQ(queue);
+
+            for (int j = 0; j < matrixGraph->vexNum; j++) {
+                if (matrixGraph->matrix[vexIndex][j] == UNFLAG_WEIGHT_GRAPH || markFlag[j]) continue;
+
+                printf("%c\t", matrixGraph->vertex[j]);
+                markFlag[j] = true;
+                enqueue_AQ(queue, j);
+            }
+        }
+    }
+
+    fprintf(stdout, "\n\n");
 }
