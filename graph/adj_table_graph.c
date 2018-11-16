@@ -43,9 +43,9 @@ void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGra
 
 EdgeNode_ATG newEdgeNode_ATG();
 
-void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge);
+void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge, AdjTableGraph pATG);
 
-void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight);
+void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight, AdjTableGraph pATG);
 
 /**
  * 为无向网或者无向图建立顶点与顶点之间的边
@@ -55,7 +55,7 @@ void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight);
  * @param tableGraph 邻接表结构存储的图
  * @param weightFlag 是否包含有权值的标示
  */
-void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, const struct ATG *tableGraph, bool weightFlag);
+void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGraph tableGraph, bool weightFlag);
 
 void dfs_ATG(AdjTableGraph tableGraph, bool *visited, int index);
 
@@ -107,17 +107,41 @@ void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGra
         }
 
         bool isConflict = false;
+        EdgeNode_ATG prev = NULL;
         while (temp->next) {
             // 检查顶点是否已经存在
             if (temp->adjvex == edge->adjvex) {
                 isConflict = true;
                 break;
             }
+
+            // 用于对节点进行排序
+            if (temp->adjvex > edge->adjvex) {
+                edge->next = temp;
+                if (temp == vi->firstEdge)
+                    vi->firstEdge = edge;
+                else if (prev)
+                    prev->next = edge;
+                tableGraph->countOfEdge++;
+                isConflict = true;
+                break;
+            }
+
+            prev = temp;
             temp = temp->next;
         }
 
         if (!isConflict) {
-            temp->next = edge;
+            // 用户对节点进行排序
+            if (temp->adjvex > edge->adjvex) {
+                if (temp == vi->firstEdge)
+                    vi->firstEdge = edge;
+                else if (prev)
+                    prev->next = edge;
+                edge->next = temp;
+            } else
+                temp->next = edge;
+
             tableGraph->countOfEdge++;
         }
     }
@@ -157,7 +181,7 @@ AdjTableGraph createUDG_ATG(Vertices vertices, Edges edges, int countOfVertex, i
     return tableGraph;
 }
 
-void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, const struct ATG *tableGraph, bool weightFlag) {
+void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGraph tableGraph, bool weightFlag) {
     for (int i = 0; i < countOfEdge; i++) {
         VertexNode_ATG vi = get_AL(tableGraph->adjTable, edges[i].vi + 1);
         VertexNode_ATG vj = get_AL(tableGraph->adjTable, edges[i].vj + 1);
@@ -166,24 +190,26 @@ void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, const stru
         int weight = UNFLAG_WEIGHT_GRAPH;
         if (weightFlag) weight = edges[i].weight;
 
-        setupEdge_ATG(vi, edges[i].vj, weight);
-        setupEdge_ATG(vj, edges[i].vi, weight);
+        setupEdge_ATG(vi, edges[i].vj, weight, tableGraph);
+        setupEdge_ATG(vj, edges[i].vi, weight, tableGraph);
     }
 }
 
-void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight) {
+void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight, AdjTableGraph tableGraph) {
     EdgeNode_ATG edge = newEdgeNode_ATG();
     edge->adjvex = adj;
     if (weight != UNFLAG_WEIGHT_GRAPH) edge->weight = weight;
-    setupEdgeForUD_ATG(vertex, edge);
+    setupEdgeForUD_ATG(vertex, edge, tableGraph);
 }
 
-void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge) {
+void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge, AdjTableGraph tableGraph) {
     EdgeNode_ATG temp = vertex->firstEdge;
     if (temp == NULL) {
         vertex->firstEdge = edge;
+        tableGraph->countOfEdge++;
     } else {
         bool isConflict = false;
+        EdgeNode_ATG prev = NULL;
         while (temp->next) {
             // 检查顶点是否已经存在
             if (temp->adjvex == edge->adjvex) {
@@ -191,12 +217,35 @@ void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge) {
                 break;
             }
 
+            // 用于对节点进行排序
+            if (temp->adjvex > edge->adjvex) {
+                edge->next = temp;
+                if (temp == vertex->firstEdge)
+                    vertex->firstEdge = edge;
+                else if (prev)
+                    prev->next = edge;
+                tableGraph->countOfEdge++;
+                isConflict = true;
+                break;
+            }
+
+            prev = temp;
             temp = temp->next;
         }
 
         // 顶点不存在才进行赋值
-        if (!isConflict)
-            temp->next = edge;
+        if (!isConflict) {
+            // 用户对节点进行排序
+            if (temp->adjvex > edge->adjvex) {
+                if (temp == vertex->firstEdge)
+                    vertex->firstEdge = edge;
+                else if (prev)
+                    prev->next = edge;
+                edge->next = temp;
+            } else
+                temp->next = edge;
+            tableGraph->countOfEdge++;
+        }
     }
 }
 
