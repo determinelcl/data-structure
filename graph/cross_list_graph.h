@@ -72,4 +72,18 @@ void newEdgeForGraphVertex_CLG(ClgGraph clgGraph, Edges edges, int countOfEdge);
  */
 void showClgGraph_CLG(ClgGraph clgGraph);
 
+/**
+ * 深度优先遍历图
+ *
+ * @param clgGraph 需要遍历的图
+ */
+void dfsTraversal_CLG(ClgGraph clgGraph);
+
+/**
+ * 广度优先遍历图
+ *
+ * @param clgGraph 需要遍历的图
+ */
+void bfsTraversal_CLG(ClgGraph clgGraph);
+
 #endif //HELLO_CROSS_LIST_GRAPH_H

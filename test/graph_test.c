@@ -125,7 +125,7 @@ void testCrossListGraph(void) {
     // [a, b, c, d, e]
     Edges edges = newEdgeTestCase(VERTEX_SIZE);
 
-    ClgGraph clgGraph = createClgGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, DN);
+    ClgGraph clgGraph = createClgGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, DG);
     showClgGraph_CLG(clgGraph);
 
     edges = malloc(sizeof(EdgeType) * 2);
@@ -138,6 +138,12 @@ void testCrossListGraph(void) {
     edges[1].weight = 90;
     newEdgeForGraphVertex_CLG(clgGraph, reAllocEdge(VERTEX_SIZE, edges), 2);
     showClgGraph_CLG(clgGraph);
+
+    printf("深度优先遍历的结果：\n");
+    dfsTraversal_CLG(clgGraph);
+
+    printf("广度优先遍历的结果：\n");
+    bfsTraversal_CLG(clgGraph);
 
     puts("\n");
 }

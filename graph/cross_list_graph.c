@@ -3,6 +3,7 @@
 //
 
 #include "cross_list_graph.h"
+#include "linked_queue.h"
 
 
 /**
@@ -51,6 +52,8 @@ EdgeNode_CLG newEdgeNode_CLG(EdgeType *edge, bool weightFlag);
  */
 bool newEdges_CLG(ClgGraph clgGraph, Edges edges, int countOfEdge, bool weightFlag);
 
+void dfs_CLG(ClgGraph clgGraph, bool *visited, int index);
+
 ClgGraph createClgGraph(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge, GraphKind kind) {
     ClgGraph clgGraph = NULL;
     switch (kind) {
@@ -85,7 +88,6 @@ ClgGraph createGraph_CLG(Vertices vertices, Edges edges, int countOfVertex, int 
     ClgGraph clgGraph = newEmptyCLG();
 
     clgGraph->vertexSize = countOfVertex;
-    clgGraph->edgeSize = countOfEdge;
 
     // 存放顶点到集合之中
     for (int i = 0; i < countOfVertex; i++) {
@@ -107,20 +109,51 @@ bool newEdges_CLG(ClgGraph clgGraph, Edges edges, int countOfEdge, bool weightFl
             return false;
         }
         EdgeNode_CLG edgeTmp = tailVertexNodeTmp->firstOut;
-        if (!edgeTmp) tailVertexNodeTmp->firstOut = edgeNodeTmp;
-        else {
+        if (!edgeTmp) {
+            tailVertexNodeTmp->firstOut = edgeNodeTmp;
+            clgGraph->edgeSize++;
+        } else {
             bool isConflict = false;
+            EdgeNode_CLG prev = NULL;
             while (edgeTmp->tLink) {
                 if (edgeTmp->tailVex == edgeNodeTmp->tailVex && edgeTmp->headVex == edgeNodeTmp->headVex) {
                     isConflict = true;
                     break;
                 }
+
+                // 排序邻接的边
+                if (edgeTmp->headVex > edgeNodeTmp->headVex) {
+                    if (edgeTmp == tailVertexNodeTmp->firstOut)
+                        tailVertexNodeTmp->firstOut = edgeNodeTmp;
+                    else if (prev)
+                        prev->tLink = edgeNodeTmp;
+
+                    edgeNodeTmp->tLink = edgeTmp;
+                    isConflict = true;
+                    clgGraph->edgeSize++;
+                    break;
+                }
+
+                prev = edgeTmp;
                 edgeTmp = edgeTmp->tLink;
             }
 
             if (isConflict) continue;
-            edgeTmp->tLink = edgeNodeTmp;
+
+            // 排序邻接的边
+            if (edgeTmp->headVex > edgeNodeTmp->headVex) {
+
+                if (edgeTmp == tailVertexNodeTmp->firstOut)
+                    tailVertexNodeTmp->firstOut = edgeNodeTmp;
+                else if (prev)
+                    prev->tLink = edgeNodeTmp;
+
+                edgeNodeTmp->tLink = edgeTmp;
+            } else
+                edgeTmp->tLink = edgeNodeTmp;
+            clgGraph->edgeSize++;
         }
+
 
         // 存放入度的边
         VertexNode_CLG headVertexNodeTmp = get_AL(clgGraph->cljTable, edgeNodeTmp->headVex + 1);
@@ -132,17 +165,43 @@ bool newEdges_CLG(ClgGraph clgGraph, Edges edges, int countOfEdge, bool weightFl
         if (!edgeTmp) headVertexNodeTmp->firstIn = edgeNodeTmp;
         else {
             bool isConflict = false;
+            EdgeNode_CLG prev = NULL;
             while (edgeTmp->hLink) {
                 if (edgeTmp->tailVex == edgeNodeTmp->tailVex && edgeTmp->headVex == edgeNodeTmp->headVex) {
                     isConflict = true;
                     break;
                 }
+
+                // 排序邻接的边
+                if (edgeTmp->tailVex > edgeNodeTmp->tailVex) {
+                    if (edgeTmp == tailVertexNodeTmp->firstIn)
+                        tailVertexNodeTmp->firstIn = edgeNodeTmp;
+                    else if (prev)
+                        prev->hLink = edgeNodeTmp;
+
+                    edgeNodeTmp->hLink = edgeTmp;
+                    isConflict = true;
+                    break;
+                }
+
+                prev = edgeTmp;
                 edgeTmp = edgeTmp->hLink;
             }
 
             if (isConflict) continue;
-            edgeTmp->hLink = edgeNodeTmp;
+            // 排序邻接的边
+            if (edgeTmp->tailVex > edgeNodeTmp->tailVex) {
+
+                if (edgeTmp == tailVertexNodeTmp->firstIn)
+                    tailVertexNodeTmp->firstIn = edgeNodeTmp;
+                else if (prev)
+                    prev->hLink = edgeNodeTmp;
+
+                edgeNodeTmp->hLink = edgeTmp;
+            } else
+                edgeTmp->hLink = edgeNodeTmp;
         }
+
     }
     return true;
 }
@@ -229,4 +288,73 @@ void showClgGraph_CLG(ClgGraph clgGraph) {
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "\n");
+}
+
+void dfsTraversal_CLG(ClgGraph clgGraph) {
+    assert(clgGraph);
+    bool visited[clgGraph->vertexSize];
+
+    for (int i = 0; i < clgGraph->vertexSize; ++i)
+        visited[i] = false;
+
+    for (int i = 0; i < clgGraph->vertexSize; ++i) {
+        if (visited[i]) continue;
+        dfs_CLG(clgGraph, visited, i);
+    }
+    fprintf(stdout, "\n\n");
+}
+
+void dfs_CLG(ClgGraph clgGraph, bool *visited, int index) {
+    visited[index] = true;
+    VertexNode_CLG vertexNode = get_AL(clgGraph->cljTable, index + 1);
+    printf("%c\t", vertexNode->data);
+
+    EdgeNode_CLG temp = vertexNode->firstOut;
+    while (temp) {
+        if (!visited[temp->headVex])
+            dfs_CLG(clgGraph, visited, temp->headVex);
+        temp = temp->tLink;
+    }
+}
+
+void bfsTraversal_CLG(ClgGraph clgGraph) {
+    assert(clgGraph);
+    bool visited[clgGraph->vertexSize];
+
+    for (int i = 0; i < clgGraph->vertexSize; i++)
+        visited[i] = false;
+
+    ArrayListPtr cljTable = clgGraph->cljTable;
+    LinkedQueue queue = newLinkedQueue();
+
+    for (int i = 0; i < clgGraph->vertexSize; i++) {
+        if (visited[i]) continue;
+        VertexNode_CLG vertexNode = get_AL(cljTable, i + 1);
+        printf("%c\t", vertexNode->data);
+        visited[i] = true;
+
+        enqueue_LQ(queue, vertexNode);
+        while (!isEmpty_LQ(queue)) {
+            VertexNode_CLG temp = frontAndDequeue_LQ(queue);
+
+            EdgeNode_CLG edgeNode = temp->firstOut;
+            while (edgeNode) {
+                if (visited[edgeNode->headVex]) {
+                    edgeNode = edgeNode->tLink;
+                    continue;
+                }
+
+                VertexNode_CLG nextVertexNode = get_AL(cljTable, edgeNode->headVex + 1);
+                if (!nextVertexNode) continue;
+
+                printf("%c\t", nextVertexNode->data);
+                visited[edgeNode->headVex] = true;
+
+                enqueue_LQ(queue, nextVertexNode);
+                edgeNode = edgeNode->tLink;
+            }
+        }
+    }
+
+    fprintf(stdout, "\n\n");
 }

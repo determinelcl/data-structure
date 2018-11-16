@@ -41,11 +41,22 @@ AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex);
  */
 void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGraph tableGraph, bool weightFlag);
 
+/**
+ *
+ * @return 新建的边节点
+ */
 EdgeNode_ATG newEdgeNode_ATG();
 
-void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge, AdjTableGraph pATG);
+/**
+ * 向无向图或无向网中设置边节点
+ *
+ * @param vertex 顶点节点
+ * @param edge 边节点
+ * @param tableGraph
+ */
+void setupEdgeForUD_ATG(VertexNode_ATG vertex, EdgeNode_ATG edge, AdjTableGraph tableGraph);
 
-void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight, AdjTableGraph pATG);
+void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight, AdjTableGraph tableGraph);
 
 /**
  * 为无向网或者无向图建立顶点与顶点之间的边
