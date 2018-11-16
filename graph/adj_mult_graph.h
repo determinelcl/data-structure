@@ -71,4 +71,18 @@ void newEdgeForGraphVertex_AMTG(AdjMultipleTableGraph tableGraph, Edges edges, i
  */
 void showAdjMultipleTableGraph_AMTG(AdjMultipleTableGraph tableGraph);
 
+/**
+ * 深度优先遍历图
+ *
+ * @param tableGraph 邻接多重表存储结构的图
+ */
+void dfsTraversal_AMTG(AdjMultipleTableGraph tableGraph);
+
+/**
+ * 广度优先遍历图
+ *
+ * @param tableGraph 邻接多重表存储结构的图
+ */
+void bfsTraversal_AMTG(AdjMultipleTableGraph tableGraph);
+
 #endif //HELLO_ADJ_MULT_GRAPH_H

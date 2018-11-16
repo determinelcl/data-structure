@@ -171,5 +171,11 @@ void testAdjMultipleTableGraph(void) {
     newEdgeForGraphVertex_AMTG(tableGraph, reAllocEdge(VERTEX_SIZE, edges), 2);
     showAdjMultipleTableGraph_AMTG(tableGraph);
 
+    printf("深度优先遍历的结果：\n");
+    dfsTraversal_AMTG(tableGraph);
+
+    printf("广度优先遍历的结果：\n");
+    bfsTraversal_AMTG(tableGraph);
+
     puts("\n");
 }

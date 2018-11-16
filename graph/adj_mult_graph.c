@@ -3,6 +3,7 @@
 //
 
 #include "adj_mult_graph.h"
+#include "linked_queue.h"
 
 /**
  * 创建多重邻接表存储结构的图
@@ -75,8 +76,11 @@ bool isNotNullOfNext(const EdgeType *currEdge, EdgeNode_AMTG itTemp);
  * @param currEdge 新建边的数据
  * @param edgeTemp 新建的边的节点元素
  * @param itTemp 图中已存在的边的节点元素
+ * @return 操作成功返回true，否则返回false
  */
-void putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp);
+bool putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp);
+
+void dfs_AMTG(AdjMultipleTableGraph tableGraph, bool *visited, int index);
 
 AdjMultipleTableGraph newAdjMultipleTableGraph(
         Vertices vertices, Edges edges, int countOfVertex, int countOfEdge, GraphKind kind) {
@@ -98,7 +102,6 @@ AdjMultipleTableGraph createGraph_AMTG(
     AdjMultipleTableGraph tableGraph = newEmptyGraph_ATMG();
     tableGraph->kind = weightFlag ? UDN : UDG;
     tableGraph->vertexSize = countOfVertex;
-    tableGraph->edgeSize = countOfEdge;
 
     for (int i = 0; i < countOfVertex; i++) {
         VertexNode_AMTG vertexTemp = newVertexNode_AMTG(vertices[i]);
@@ -121,10 +124,12 @@ void createNewEdgeForVertex_ATMG(AdjMultipleTableGraph tableGraph, Edges edges, 
         }
         EdgeNode_AMTG edgeTemp = newEdgeNode_ATMG(&currEdge, weightFlag);
         EdgeNode_AMTG itTemp = firstVertexTemp->firstIn;
-        if (!itTemp)
+        if (!itTemp) {
             firstVertexTemp->firstIn = edgeTemp;
-        else {
-            putEdgeIntoCorrectPos_AMTG(&currEdge, edgeTemp, itTemp);
+            tableGraph->edgeSize++;
+        } else {
+            bool rs = putEdgeIntoCorrectPos_AMTG(&currEdge, edgeTemp, itTemp);
+            if (rs) tableGraph->edgeSize++;
         }
 
         // 存放入度的边
@@ -134,15 +139,15 @@ void createNewEdgeForVertex_ATMG(AdjMultipleTableGraph tableGraph, Edges edges, 
             exit(EXIT_FAILURE);
         }
         itTemp = secondVertexTemp->firstIn;
-        if (!itTemp)
+        if (!itTemp) {
             secondVertexTemp->firstIn = edgeTemp;
-        else {
+        } else
             putEdgeIntoCorrectPos_AMTG(&currEdge, edgeTemp, itTemp);
-        }
+
     }
 }
 
-void putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp) {
+bool putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp) {
     bool isConflict = false;
     while (isNotNullOfNext(currEdge, itTemp)) {
         if (theEdgeIsExist(currEdge, itTemp)) {
@@ -156,12 +161,17 @@ void putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp
             itTemp = itTemp->jlink;
     }
 
-    if (isConflict) return;
+    if (isConflict) return false;
 
-    if ((*currEdge).vi == itTemp->ivex || (*currEdge).vj == itTemp->ivex)
+    if ((*currEdge).vi == itTemp->ivex || (*currEdge).vj == itTemp->ivex) {
         itTemp->ilink = edgeTemp;
-    else if ((*currEdge).vi == itTemp->jvex || (*currEdge).vj == itTemp->jvex)
+        return true;
+    } else if ((*currEdge).vi == itTemp->jvex || (*currEdge).vj == itTemp->jvex) {
         itTemp->jlink = edgeTemp;
+        return true;
+    }
+
+    return false;
 }
 
 bool isNotNullOfNext(const EdgeType *currEdge, EdgeNode_AMTG itTemp) {
@@ -239,4 +249,82 @@ void showAdjMultipleTableGraph_AMTG(AdjMultipleTableGraph tableGraph) {
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "\n");
+}
+
+void dfsTraversal_AMTG(AdjMultipleTableGraph tableGraph) {
+    assert(tableGraph);
+
+    bool visited[tableGraph->vertexSize];
+    for (int i = 0; i < tableGraph->vertexSize; i++)
+        visited[i] = false;
+
+    for (int i = 0; i < tableGraph->vertexSize; i++) {
+        if (visited[i]) continue;
+        dfs_AMTG(tableGraph, visited, i);
+    }
+
+    fprintf(stdout, "\n\n");
+}
+
+void dfs_AMTG(AdjMultipleTableGraph tableGraph, bool *visited, int index) {
+    visited[index] = true;
+    VertexNode_AMTG vertexNode = get_AL(tableGraph->table, index + 1);
+    printf("%c\t", vertexNode->data);
+
+    EdgeNode_AMTG temp = vertexNode->firstIn;
+    while (temp) {
+        if (!visited[temp->ivex])
+            dfs_AMTG(tableGraph, visited, temp->ivex);
+        else if (!visited[temp->jvex])
+            dfs_AMTG(tableGraph, visited, temp->jvex);
+
+        if (temp->ivex == index)
+            temp = temp->ilink;
+        else if (temp->jvex == index)
+            temp = temp->jlink;
+    }
+}
+
+void bfsTraversal_AMTG(AdjMultipleTableGraph tableGraph) {
+    assert(tableGraph);
+
+    bool visited[tableGraph->vertexSize];
+    for (int i = 0; i < tableGraph->vertexSize; i++)
+        visited[i] = false;
+
+    ArrayListPtr table = tableGraph->table;
+    LinkedQueue queue = newLinkedQueue();
+    for (int i = 0; i < tableGraph->vertexSize; i++) {
+        if (visited[i]) continue;
+        VertexNode_AMTG vertexNode = get_AL(table, i + 1);
+        printf("%c\t", vertexNode->data);
+        visited[i] = true;
+
+        enqueue_LQ(queue, vertexNode);
+        while (!isEmpty_LQ(queue)) {
+            VertexNode_AMTG vertexNodeTemp = frontAndDequeue_LQ(queue);
+
+            EdgeNode_AMTG temp = vertexNodeTemp->firstIn;
+            while (temp) {
+                VertexNode_AMTG outputVertexNode = NULL;
+                if (!visited[temp->ivex]) {
+                    outputVertexNode = get_AL(table, temp->ivex + 1);
+                    visited[temp->ivex] = true;
+                    enqueue_LQ(queue, outputVertexNode);
+                } else if (!visited[temp->jvex]) {
+                    outputVertexNode = get_AL(table, temp->jvex + 1);
+                    visited[temp->jvex] = true;
+                    enqueue_LQ(queue, outputVertexNode);
+                }
+
+                if (outputVertexNode)
+                    printf("%c\t", outputVertexNode->data);
+
+                if (temp->ivex == i)
+                    temp = temp->ilink;
+                else if (temp->jvex == i)
+                    temp = temp->jlink;
+            }
+        }
+    }
 }
