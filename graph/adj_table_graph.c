@@ -3,6 +3,7 @@
 //
 
 #include "adj_table_graph.h"
+#include "linked_queue.h"
 
 
 /**
@@ -28,7 +29,7 @@ AdjTableGraph createUDN_ATG(Vertices vertices, Edges edges, int countOfVertex, i
 /**
  * 新建一个只有顶点的图
  */
-AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex, int countOfEdge);
+AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex);
 
 /**
  * 为有向网或者有向图建立顶点与顶点之间的边
@@ -38,7 +39,7 @@ AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex, i
  * @param tableGraph 邻接表结构存储的图
  * @param weightFlag 是否包含有权值的标示
  */
-void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, const struct ATG *tableGraph, bool weightFlag);
+void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGraph tableGraph, bool weightFlag);
 
 EdgeNode_ATG newEdgeNode_ATG();
 
@@ -55,6 +56,8 @@ void setupEdge_ATG(VertexNode_ATG vertex, int adj, int weight);
  * @param weightFlag 是否包含有权值的标示
  */
 void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, const struct ATG *tableGraph, bool weightFlag);
+
+void dfs_ATG(AdjTableGraph tableGraph, bool *visited, int index);
 
 AdjTableGraph newAdjTableGraph(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge, GraphKind kind) {
     switch (kind) {
@@ -75,7 +78,7 @@ AdjTableGraph newAdjTableGraph(Vertices vertices, Edges edges, int countOfVertex
 
 AdjTableGraph createDG_ATG(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge) {
 
-    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex, countOfEdge);
+    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex);
     tableGraph->kind = DG;
 
     newEdgeRelationForD_ATG(edges, countOfEdge, tableGraph, false);
@@ -83,7 +86,7 @@ AdjTableGraph createDG_ATG(Vertices vertices, Edges edges, int countOfVertex, in
     return tableGraph;
 }
 
-void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, const struct ATG *tableGraph, bool weightFlag) {
+void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGraph tableGraph, bool weightFlag) {
     for (int i = 0; i < countOfEdge; i++) {
         VertexNode_ATG vi = get_AL(tableGraph->adjTable, edges[i].vi + 1);
 
@@ -99,6 +102,7 @@ void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, const struc
         EdgeNode_ATG temp = vi->firstEdge;
         if (temp == NULL) {
             vi->firstEdge = edge;
+            tableGraph->countOfEdge++;
             continue;
         }
 
@@ -112,16 +116,18 @@ void newEdgeRelationForD_ATG(const EdgeType *edges, int countOfEdge, const struc
             temp = temp->next;
         }
 
-        if (!isConflict)
+        if (!isConflict) {
             temp->next = edge;
+            tableGraph->countOfEdge++;
+        }
     }
 }
 
-AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex, int countOfEdge) {
+AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex) {
     AdjTableGraph tableGraph = malloc(sizeof(struct ATG));
     assert(tableGraph);
     tableGraph->countOfVertex = countOfVertex;
-    tableGraph->countOfEdge = countOfEdge;
+    tableGraph->countOfEdge = 0;
     tableGraph->adjTable = newArrayList();
 
     for (int i = 0; i < countOfVertex; i++) {
@@ -135,7 +141,7 @@ AdjTableGraph newEmptyGraph_ATG(const VertexType *vertices, int countOfVertex, i
 }
 
 AdjTableGraph createDN_ATG(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge) {
-    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex, countOfEdge);
+    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex);
     tableGraph->kind = DN;
 
     newEdgeRelationForD_ATG(edges, countOfEdge, tableGraph, true);
@@ -144,7 +150,7 @@ AdjTableGraph createDN_ATG(Vertices vertices, Edges edges, int countOfVertex, in
 }
 
 AdjTableGraph createUDG_ATG(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge) {
-    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex, countOfEdge);
+    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex);
     tableGraph->kind = UDG;
 
     newEdgeRelationForUD_ATG(edges, countOfEdge, tableGraph, false);
@@ -205,7 +211,7 @@ EdgeNode_ATG newEdgeNode_ATG() {
 
 
 AdjTableGraph createUDN_ATG(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge) {
-    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex, countOfEdge);
+    AdjTableGraph tableGraph = newEmptyGraph_ATG(vertices, countOfVertex);
     tableGraph->kind = UDN;
 
     newEdgeRelationForUD_ATG(edges, countOfEdge, tableGraph, true);
@@ -256,6 +262,73 @@ void showAdjTableGraph_ATG(AdjTableGraph tableGraph) {
         }
 
         fprintf(stdout, "\n");
+    }
+
+    fprintf(stdout, "\n\n");
+}
+
+void dfsTraversal_ATG(AdjTableGraph tableGraph) {
+    assert(tableGraph);
+    bool visited[tableGraph->countOfVertex];
+    for (int i = 0; i < tableGraph->countOfVertex; i++)
+        visited[i] = false;
+
+    for (int i = 0; i < tableGraph->countOfVertex; i++) {
+        if (visited[i]) continue;
+        dfs_ATG(tableGraph, visited, i);
+    }
+
+    fprintf(stdout, "\n\n");
+}
+
+void dfs_ATG(AdjTableGraph tableGraph, bool *visited, int index) {
+    visited[index] = true;
+    VertexNode_ATG vertexNode = get_AL(tableGraph->adjTable, index + 1);
+    printf("%c\t", vertexNode->vertex);
+
+    EdgeNode_ATG temp = vertexNode->firstEdge;
+    while (temp) {
+        if (!visited[temp->adjvex])
+            dfs_ATG(tableGraph, visited, temp->adjvex);
+        temp = temp->next;
+    }
+}
+
+void bfsTraversal_ATG(AdjTableGraph tableGraph) {
+    LinkedQueue queue = newLinkedQueue();
+    bool visited[tableGraph->countOfVertex];
+    for (int i = 0; i < tableGraph->countOfVertex; i++)
+        visited[i] = false;
+
+    ArrayListPtr adjTable = tableGraph->adjTable;
+    for (int i = 0; i < tableGraph->countOfVertex; i++) {
+        if (visited[i]) continue;
+
+        visited[i] = true;
+        VertexNode_ATG vertexNode = get_AL(adjTable, i + 1);
+        printf("%c\t", vertexNode->vertex);
+        enqueue_LQ(queue, vertexNode);
+
+        while (!isEmpty_LQ(queue)) {
+            VertexNode_ATG vertexNodeTemp = frontAndDequeue_LQ(queue);
+
+            EdgeNode_ATG temp = vertexNodeTemp->firstEdge;
+            while (temp) {
+                if (visited[temp->adjvex]) {
+                    temp = temp->next;
+                    continue;
+                }
+
+                VertexNode_ATG nextVertex = get_AL(adjTable, temp->adjvex + 1);
+                if (!nextVertex) continue;
+                printf("%c\t", nextVertex->vertex);
+                visited[temp->adjvex] = true;
+
+                enqueue_LQ(queue, nextVertex);
+                temp = temp->next;
+            }
+
+        }
     }
 
     fprintf(stdout, "\n\n");

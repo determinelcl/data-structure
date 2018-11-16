@@ -55,5 +55,18 @@ void newEdgeForGraphVertex_ATG(AdjTableGraph tableGraph, Edges edges, int countO
  */
 void showAdjTableGraph_ATG(AdjTableGraph tableGraph);
 
+/**
+ * 深度优先遍历图
+ *
+ * @param tableGraph 需要遍历的图
+ */
+void dfsTraversal_ATG(AdjTableGraph tableGraph);
+
+/**
+ * 广度优先遍历图
+ *
+ * @param tableGraph 需要遍历的图
+ */
+void bfsTraversal_ATG(AdjTableGraph tableGraph);
 
 #endif //HELLO_ADJ_TABLE_GRAPH_H

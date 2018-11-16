@@ -92,7 +92,7 @@ void testAdjTableGraph() {
     // [a, b, c, d, e]
     Edges edges = newEdgeTestCase(VERTEX_SIZE);
 
-    AdjTableGraph tableGraph = newAdjTableGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, UDN);
+    AdjTableGraph tableGraph = newAdjTableGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, DG);
     showAdjTableGraph_ATG(tableGraph);
 
     edges = malloc(sizeof(EdgeType) * 2);
@@ -105,6 +105,12 @@ void testAdjTableGraph() {
     edges[1].weight = 90;
     newEdgeForGraphVertex_ATG(tableGraph, reAllocEdge(VERTEX_SIZE, edges), 2);
     showAdjTableGraph_ATG(tableGraph);
+
+    printf("深度优先遍历的结果：\n");
+    dfsTraversal_ATG(tableGraph);
+
+    printf("广度优先遍历的结果：\n");
+    bfsTraversal_ATG(tableGraph);
 
     puts("\n");
 }
