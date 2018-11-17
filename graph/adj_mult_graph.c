@@ -59,7 +59,7 @@ void createNewEdgeForVertex_ATMG(AdjMultipleTableGraph tableGraph, Edges edges, 
  * @param itTemp 已存在图中的边
  * @return 存在返回true，否则返回false
  */
-bool theEdgeIsExist(const EdgeType *currEdge, EdgeNode_AMTG itTemp);
+bool theEdgeIsExist(EdgeNode_AMTG currEdge, EdgeNode_AMTG itTemp);
 
 /**
  * 判断下一个节点（ilink或jlink）是否为空
@@ -68,7 +68,7 @@ bool theEdgeIsExist(const EdgeType *currEdge, EdgeNode_AMTG itTemp);
  * @param itTemp 已存在图中的边
  * @return 不为空返回true，否则返回false
  */
-bool isNotNullOfNext(const EdgeType *currEdge, EdgeNode_AMTG itTemp);
+bool isNotNullOfNext(EdgeNode_AMTG currEdge, EdgeNode_AMTG itTemp);
 
 /**
  * 将新建的边放进正确的位置
@@ -78,9 +78,27 @@ bool isNotNullOfNext(const EdgeType *currEdge, EdgeNode_AMTG itTemp);
  * @param itTemp 图中已存在的边的节点元素
  * @return 操作成功返回true，否则返回false
  */
-bool putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp);
+bool putEdgeIntoCorrectPos_AMTG(EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp, VertexNode_AMTG firstIn);
 
 void dfs_AMTG(AdjMultipleTableGraph tableGraph, bool *visited, int index);
+
+/**
+ * 判断需要设置ilink的值
+ *
+ * @param currEdge 需要设置的值的节点
+ * @param itTemp 接收赋值的节点
+ * @return 需要设置返回true，否则返回false
+ */
+bool isShouldBeSetILink(EdgeNode_AMTG currEdge, const struct EdgeNode_AMTG *itTemp);
+
+/**
+ * 判断需要设置ilink的值
+ *
+ * @param currEdge 需要设置的值的节点
+ * @param itTemp 接收赋值的节点
+ * @return 需要设置返回true，否则返回false
+ */
+bool isShouldBeSetJLink(EdgeNode_AMTG currEdge, const struct EdgeNode_AMTG *itTemp);
 
 AdjMultipleTableGraph newAdjMultipleTableGraph(
         Vertices vertices, Edges edges, int countOfVertex, int countOfEdge, GraphKind kind) {
@@ -128,7 +146,7 @@ void createNewEdgeForVertex_ATMG(AdjMultipleTableGraph tableGraph, Edges edges, 
             firstVertexTemp->firstIn = edgeTemp;
             tableGraph->edgeSize++;
         } else {
-            bool rs = putEdgeIntoCorrectPos_AMTG(&currEdge, edgeTemp, itTemp);
+            bool rs = putEdgeIntoCorrectPos_AMTG(edgeTemp, itTemp, firstVertexTemp);
             if (rs) tableGraph->edgeSize++;
         }
 
@@ -142,31 +160,81 @@ void createNewEdgeForVertex_ATMG(AdjMultipleTableGraph tableGraph, Edges edges, 
         if (!itTemp) {
             secondVertexTemp->firstIn = edgeTemp;
         } else
-            putEdgeIntoCorrectPos_AMTG(&currEdge, edgeTemp, itTemp);
+            putEdgeIntoCorrectPos_AMTG(edgeTemp, itTemp, secondVertexTemp);
 
     }
 }
 
-bool putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp) {
+bool isShouldBeSetILink(EdgeNode_AMTG currEdge, const struct EdgeNode_AMTG *itTemp) {
+    return currEdge->ivex == itTemp->ivex || currEdge->jvex == itTemp->ivex;
+}
+
+bool isShouldBeSetJLink(EdgeNode_AMTG currEdge, const struct EdgeNode_AMTG *itTemp) {
+    return currEdge->ivex == itTemp->jvex || currEdge->jvex == itTemp->jvex;
+}
+
+bool isCurrGreaterThanIt(EdgeNode_AMTG currEdge, const struct EdgeNode_AMTG *itTemp) {
+    return (itTemp->ivex + itTemp->jvex) > (currEdge->ivex + currEdge->jvex);
+}
+
+bool putEdgeIntoCorrectPos_AMTG(EdgeNode_AMTG edgeTemp, EdgeNode_AMTG itTemp, VertexNode_AMTG firstIn) {
     bool isConflict = false;
-    while (isNotNullOfNext(currEdge, itTemp)) {
-        if (theEdgeIsExist(currEdge, itTemp)) {
+    EdgeNode_AMTG prev = NULL;
+    while (isNotNullOfNext(edgeTemp, itTemp)) {
+        if (theEdgeIsExist(edgeTemp, itTemp)) {
             isConflict = true;
             break;
         }
 
-        if ((*currEdge).vi == itTemp->ivex || (*currEdge).vj == itTemp->ivex)
+        // 排序邻接的边
+        if (isCurrGreaterThanIt(edgeTemp, itTemp)) {
+            if (itTemp == firstIn->firstIn)
+                firstIn->firstIn = edgeTemp;
+            else if (prev) {
+                if (isShouldBeSetILink(edgeTemp, prev))
+                    prev->ilink = edgeTemp;
+                else if (isShouldBeSetJLink(edgeTemp, prev))
+                    prev->jlink = edgeTemp;
+            }
+
+            if (isShouldBeSetILink(itTemp, edgeTemp))
+                edgeTemp->ilink = itTemp;
+            else if (isShouldBeSetJLink(itTemp, edgeTemp))
+                edgeTemp->jlink = itTemp;
+
+            isConflict = true;
+            break;
+        }
+
+        prev = itTemp;
+        if (isShouldBeSetILink(edgeTemp, itTemp))
             itTemp = itTemp->ilink;
-        else if ((*currEdge).vi == itTemp->jvex || (*currEdge).vj == itTemp->jvex)
+        else if (isShouldBeSetJLink(edgeTemp, itTemp))
             itTemp = itTemp->jlink;
     }
 
     if (isConflict) return false;
 
-    if ((*currEdge).vi == itTemp->ivex || (*currEdge).vj == itTemp->ivex) {
+    // 排序邻接的边
+    if (isCurrGreaterThanIt(edgeTemp, itTemp)) {
+        if (itTemp == firstIn->firstIn)
+            firstIn->firstIn = edgeTemp;
+        else if (prev) {
+            if (isShouldBeSetILink(edgeTemp, prev))
+                prev->ilink = edgeTemp;
+            else if (isShouldBeSetJLink(edgeTemp, prev))
+                prev->jlink = edgeTemp;
+        }
+
+        if (isShouldBeSetILink(itTemp, edgeTemp))
+            edgeTemp->ilink = itTemp;
+        else if (isShouldBeSetJLink(itTemp, edgeTemp))
+            edgeTemp->jlink = itTemp;
+
+    } else if (isShouldBeSetILink(edgeTemp, itTemp)) {
         itTemp->ilink = edgeTemp;
         return true;
-    } else if ((*currEdge).vi == itTemp->jvex || (*currEdge).vj == itTemp->jvex) {
+    } else if (isShouldBeSetJLink(edgeTemp, itTemp)) {
         itTemp->jlink = edgeTemp;
         return true;
     }
@@ -174,14 +242,14 @@ bool putEdgeIntoCorrectPos_AMTG(const EdgeType *currEdge, EdgeNode_AMTG edgeTemp
     return false;
 }
 
-bool isNotNullOfNext(const EdgeType *currEdge, EdgeNode_AMTG itTemp) {
-    return (itTemp->ilink && ((*currEdge).vi == itTemp->ivex || (*currEdge).vj == itTemp->ivex)) ||
-           (itTemp->jlink && ((*currEdge).vi == itTemp->jvex || (*currEdge).vj == itTemp->jvex));
+bool isNotNullOfNext(EdgeNode_AMTG currEdge, EdgeNode_AMTG itTemp) {
+    return (itTemp->ilink && isShouldBeSetILink(currEdge, itTemp)) ||
+           (itTemp->jlink && isShouldBeSetJLink(currEdge, itTemp));
 }
 
-bool theEdgeIsExist(const EdgeType *currEdge, EdgeNode_AMTG itTemp) {
-    return ((*currEdge).vi == itTemp->ivex && (*currEdge).vj == itTemp->jvex) ||
-           ((*currEdge).vi == itTemp->jvex && (*currEdge).vj == itTemp->ivex);
+bool theEdgeIsExist(EdgeNode_AMTG currEdge, EdgeNode_AMTG itTemp) {
+    return (currEdge->ivex == itTemp->ivex && currEdge->jvex == itTemp->jvex) ||
+           (currEdge->ivex == itTemp->jvex && currEdge->jvex == itTemp->ivex);
 }
 
 EdgeNode_AMTG newEdgeNode_ATMG(EdgeType *currEdge, bool weightFlag) {
