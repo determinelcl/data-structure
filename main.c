@@ -20,11 +20,11 @@ int main() {
     testAvlTree();
     testSeqBinaryTree();
     testHuffmanTree();
+    testLHuffmanTree();
 
     testAdjMatrixGraph();
     testAdjTableGraph();
     testCrossListGraph();
     testAdjMultipleTableGraph();
-    printf("Hello, World!\n");
     return 0;
 }

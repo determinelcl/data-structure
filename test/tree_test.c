@@ -17,7 +17,7 @@ void testBinary_Tree(void) {
     int rightChild[SIZE] = {16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
 
     for (int i = 0; i < SIZE; ++i) {
-        insert_BT(tree, &leftChild[i], LEFT_CHILD);
+        insert_BT(tree, leftChild[i], LEFT_CHILD);
     }
 
     printf("二叉树是否为空:%s\n", isEmpty_BT(tree) ? "是" : "否");
@@ -33,7 +33,7 @@ void testBinary_Tree(void) {
 
     printf("向二叉树中的右子树插入元素\n");
     for (int i = 0; i < SIZE; ++i) {
-        insert_BT(tree, &rightChild[i], RIGHT_CHILD);
+        insert_BT(tree, rightChild[i], RIGHT_CHILD);
     }
 
     printf("二叉树是否为空:%s\n", isEmpty_BT(tree) ? "是" : "否");
@@ -47,6 +47,22 @@ void testBinary_Tree(void) {
     printf("层序遍历：\n");
     levelTraversal_BT(tree);
 
+
+    printf("使用扩展的先序序列进行构建二叉树：\n");
+    int null = CREATE_NULL_FLAG;
+    int data[] = {1, 2, 4, 6, null, null, null, 5, null, null, 3, 7, null, null, 8, null, null};
+    BinaryTree newBinaryTree = createBinaryTree(data);
+
+    printf("二叉树是否为空:%s\n", isEmpty_BT(newBinaryTree) ? "是" : "否");
+    printf("节点数目%d\n", size_BT(newBinaryTree));
+    printf("先序遍历：\n");
+    preTraversal_BT(newBinaryTree);
+    printf("中序遍历：\n");
+    middleTraversal_BT(newBinaryTree);
+    printf("后序遍历：\n");
+    behindTraversal_BT(newBinaryTree);
+    printf("层序遍历：\n");
+    levelTraversal_BT(newBinaryTree);
     puts("\n");
 }
 
@@ -271,7 +287,7 @@ void testSeqBinaryTree(void) {
 
 void testHuffmanTree() {
     printf("*****************************************************\n");
-    printf("*                  哈夫曼数测试例程                   *\n");
+    printf("*                  哈夫曼树测试例程                   *\n");
     printf("*****************************************************\n");
 
     HuffmanTree tree;
@@ -295,5 +311,25 @@ void testHuffmanTree() {
     decodingHuffmanCode_HT(tree, data, testDecodingStr, testDecodingStrLen, result);
     printf("%s\n", result);
 
+    puts("\n");
+}
+
+void testLHuffmanTree(void) {
+    printf("*****************************************************\n");
+    printf("*                哈夫曼树链式存储测试例程              *\n");
+    printf("*****************************************************\n");
+
+    const int SIZE = 4;
+    DataType_LHT *data = "abcd";
+    int weight[SIZE] = {30, 5, 10, 20};
+    LHuffmanTree tree = createLHuffmanTree(weight, data, SIZE);
+    showHuffmanTree_LHT(tree);
+
+    char *encodeStr[SIZE] = {"", "", "", ""};
+
+    encodeHuffmanTree_LHT(tree, data, encodeStr);
+    printHuffmanCode_LHT(data, encodeStr);
+
+    printf("Huffman树的带权路径长度为：%d\n", calculateWPL_LHT(weight, encodeStr, SIZE));
     puts("\n");
 }
