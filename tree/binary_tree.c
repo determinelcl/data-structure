@@ -6,6 +6,75 @@
 
 #define EMPTY_OF_DATA_BT 0
 
+static PtrToNode_BT createBiTree_BT(DataType_BT *data, int *index, int *numOfData);
+
+PtrToNode_BT createBiTree2_BT(const DataType_BT *prevArray, const DataType_BT *middleArray, int *sizeOfData, int n);
+
+BinaryTree createBinaryTree(DataType_BT *nodeData) {
+    BinaryTree binaryTree = newBinaryTree();
+
+    int rootIndex = 0;
+
+    binaryTree->root = createBiTree_BT(nodeData, &rootIndex, &binaryTree->size);
+
+    return binaryTree;
+}
+
+static PtrToNode_BT createBiTree_BT(DataType_BT *data, int *index, int *numOfData) {
+    DataType_BT nodeData = data[(*index)++];
+    if (nodeData == CREATE_NULL_FLAG)
+        return NULL;
+
+    PtrToNode_BT root = malloc(sizeof(struct TreeNode_BT));
+    assert(root);
+    root->data = nodeData;
+    root->left = createBiTree_BT(data, index, numOfData);
+    root->right = createBiTree_BT(data, index, numOfData);
+    (*numOfData)++;
+    return root;
+}
+
+BinaryTree createBinaryTree2(DataType_BT *prevArray, DataType_BT *middleArray, int size) {
+    BinaryTree binaryTree = newBinaryTree();
+    binaryTree->root = createBiTree2_BT(prevArray, middleArray, &binaryTree->size, size);
+    binaryTree->size = size;
+    return binaryTree;
+}
+
+PtrToNode_BT createBiTree2_BT(const DataType_BT *prevArray, const DataType_BT *middleArray, int *sizeOfData, int n) {
+    if (n == 0) return NULL;
+
+    PtrToNode_BT root = malloc(sizeof(struct TreeNode_BT));
+    assert(root);
+
+    DataType_BT ch = prevArray[0];
+    root->data = ch;
+
+    int lfArray[n], rfArray[n];
+    int lcArray[n], rcArray[n];
+    int ln, rn, i, j;
+
+    for (i = 0; middleArray[i] != ch; i++)      // 左子树的中序
+        lcArray[i] = middleArray[i];
+
+    ln = i;
+    i++;
+    for (rn = 0; i < n; rn++, i++)              // 右子树的中序
+        rcArray[rn] = middleArray[i];
+
+
+    for (i = 0; i < ln; i++)                    // 左子树的先序
+        lfArray[i] = prevArray[i + 1];
+
+
+    for (j = 0; j < rn; j++, i++)               // 右子树的先序
+        rfArray[j] = prevArray[i + 1];
+
+
+    root->left = createBiTree2_BT(lfArray, lcArray, sizeOfData, ln);//以当前节点的左指针为下一级二叉树的跟
+    root->right = createBiTree2_BT(rfArray, rcArray, sizeOfData, rn);//以当前节点的右指针为下一级二叉树的跟
+    return root;
+}
 
 BinaryTree newBinaryTree() {
     BinaryTree tree = (BinaryTree) malloc(sizeof(struct BiTree));
@@ -81,7 +150,7 @@ bool insert_BT(BinaryTree tree, DataType_BT data, ChildTree flag) {
 }
 
 static void printData(PtrToNode_BT tree) {
-    printf("%d\t", *(int *) tree->data);
+    printf("%d\t", tree->data);
 }
 
 static void pTraversal_BT(PtrToNode_BT tree) {

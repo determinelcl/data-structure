@@ -63,6 +63,24 @@ void testBinary_Tree(void) {
     behindTraversal_BT(newBinaryTree);
     printf("层序遍历：\n");
     levelTraversal_BT(newBinaryTree);
+
+    printf("使用先序序列和中序序列进行构建二叉树：\n");
+    const int SIZE_SERI = 8;
+    int preArr[SIZE_SERI] = {1, 2, 4, 6, 5, 3, 7, 8};
+    int inArr[SIZE_SERI] = {6, 4, 2, 5, 1, 7, 3, 8};
+    BinaryTree tree2 = createBinaryTree2(preArr, inArr, SIZE_SERI);
+
+    printf("二叉树是否为空:%s\n", isEmpty_BT(tree2) ? "是" : "否");
+    printf("节点数目%d\n", size_BT(tree2));
+    printf("先序遍历：\n");
+    preTraversal_BT(tree2);
+    printf("中序遍历：\n");
+    middleTraversal_BT(tree2);
+    printf("后序遍历：\n");
+    behindTraversal_BT(tree2);
+    printf("层序遍历：\n");
+    levelTraversal_BT(tree2);
+
     puts("\n");
 }
 
