@@ -57,4 +57,26 @@ void dfsTraversal_AMG(MatrixGraph matrixGraph);
  */
 void bfsTraversal_AMG(MatrixGraph matrixGraph);
 
+/**
+ * 统计邻接矩阵存储图的连通分量的个数
+ *
+ * @param matrixGraph 邻接矩阵存储的结构的存储
+ * @return 连通分量的个数
+ */
+int numOfConnectedComponents_AMG(MatrixGraph matrixGraph);
+
+/**
+ * 使用Prime算法生成最小二叉生成树
+ *
+ * @param matrixGraph 邻接矩阵存储结构的图
+ */
+void miniSpanTree_Prim(MatrixGraph matrixGraph);
+
+/**
+ * 使用Kruskal算法生成最小二叉生成树
+ *
+ * @param matrixGraph 邻接矩阵存储结构的图
+ */
+void miniSpanTree_Kruskal(MatrixGraph matrixGraph);
+
 #endif //HELLO_ADJ_MATRIX_GRAPH_H

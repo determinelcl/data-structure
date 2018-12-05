@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#define UNFLAG_WEIGHT_GRAPH -1
+#define UNFLAG_WEIGHT_GRAPH 32767
 
 typedef enum {
     DG,     // 有向图

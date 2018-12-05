@@ -21,7 +21,7 @@ void testAdjMatrixGraph() {
     // [a, b, c, d, e]
     Edges edge = newEdgeTestCase(VERTEX_SIZE);
 
-    MatrixGraph matrix = createAdjacencyMatrix(vertex, edge, VERTEX_SIZE, VERTEX_SIZE, DG);
+    MatrixGraph matrix = createAdjacencyMatrix(vertex, edge, VERTEX_SIZE, VERTEX_SIZE, UDN);
     showMatrixGraph_AMG(matrix);
 
     edge = reAllocEdge(VERTEX_SIZE, edge);
@@ -34,6 +34,14 @@ void testAdjMatrixGraph() {
 
     printf("广度优先遍历的结果：\n");
     bfsTraversal_AMG(matrix);
+
+    printf("连通分量的个数为：%d\n", numOfConnectedComponents_AMG(matrix));
+
+    printf("Prime的算法计算最小生成树：\n");
+    miniSpanTree_Prim(matrix);
+
+    printf("Kruskal的算法计算最小生成树：\n");
+    miniSpanTree_Kruskal(matrix);
     puts("\n");
 }
 
