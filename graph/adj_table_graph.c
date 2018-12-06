@@ -70,6 +70,12 @@ void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGr
 
 void dfs_ATG(AdjTableGraph tableGraph, bool *visited, int index);
 
+/**
+ * 用于计算各个顶点的入度
+ *
+ * @param tableGraph 邻接表存储结构的图
+ * @param inDegree 用于存储对应顶点的入度信息的数组
+ */
 void calInDegree_ATG(AdjTableGraph tableGraph, int *inDegree);
 
 AdjTableGraph newAdjTableGraph(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge, GraphKind kind) {
@@ -455,6 +461,7 @@ void calInDegree_ATG(AdjTableGraph tableGraph, int *inDegree) {
  * @param tableGraph 邻接表存储结构的图
  * @param stack2 存储拓扑排序序列的栈
  * @param ve 存储各顶点的最早发生时间的数组
+ * @param top2 用于标示stack2的栈顶指针
  * @return 无回路返回true，否则返回false
  */
 bool topologicalSort2_ATG(AdjTableGraph tableGraph, int *stack2, int *ve, int *top2) {
