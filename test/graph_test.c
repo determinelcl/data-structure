@@ -21,7 +21,7 @@ void testAdjMatrixGraph() {
     // [a, b, c, d, e]
     Edges edge = newEdgeTestCase(VERTEX_SIZE);
 
-    MatrixGraph matrix = createAdjacencyMatrix(vertex, edge, VERTEX_SIZE, VERTEX_SIZE, UDN);
+    MatrixGraph matrix = createAdjacencyMatrix(vertex, edge, VERTEX_SIZE, VERTEX_SIZE, DN);
     showMatrixGraph_AMG(matrix);
 
     edge = reAllocEdge(VERTEX_SIZE, edge);
@@ -42,6 +42,33 @@ void testAdjMatrixGraph() {
 
     printf("Kruskal的算法计算最小生成树：\n");
     miniSpanTree_Kruskal(matrix);
+
+    printf("Dijkstra算法计算最短路径：\n");
+    int D[matrix->vexNum], V0 = 0;
+    shortPath_Dijkstra(matrix, V0, D);
+    for (int i = 0; i < matrix->vexNum; ++i)
+        printf("%c -> %c : %d\n", matrix->vertex[V0], matrix->vertex[i], D[i]);
+
+    printf("Floyd算法计算最短路径：\n");
+    int P[matrix->vexNum][matrix->vexNum];
+    int D_f[matrix->vexNum][matrix->vexNum];
+    shortestPath_Floyd(matrix, P, D_f);
+    printf("矩阵D：\n");
+    for (int i = 0; i < matrix->vexNum; ++i) {
+        for (int j = 0; j < matrix->vexNum; ++j)
+            if (D_f[i][j] == UNFLAG_WEIGHT_GRAPH)
+                printf("∞\t");
+            else
+                printf("%d\t", D_f[i][j]);
+        printf("\n");
+    }
+
+    printf("矩阵P：\n");
+    for (int i = 0; i < matrix->vexNum; ++i) {
+        for (int j = 0; j < matrix->vexNum; ++j)
+            printf("%d\t", P[i][j]);
+        printf("\n");
+    }
     puts("\n");
 }
 

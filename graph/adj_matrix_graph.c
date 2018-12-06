@@ -410,3 +410,83 @@ void sortEdges_AMG(MatrixGraph matrixGraph, Edges edges) {
         }
     }
 }
+
+/**
+ * 1、初始化：S={v},v为源点。U={除V外所有点}
+ * 2、从U中选择到v距离最小的顶点k，把K加入到S中。
+ * 3、把k作为新的中间点，更新U中各点到源点的距离
+ * 4、重复2,3过程直到所有点都在S中
+ *
+ * @param matrixGraph 邻接矩阵存储的图
+ * @param v0 源点
+ * @param D D[v]标示v0到v的最短路径之和
+ */
+void shortPath_Dijkstra(MatrixGraph matrixGraph, int v0, int *D) {
+    bool book[matrixGraph->vexNum]; // 标记顶点v是否已找到最短路径
+
+    int P[matrixGraph->vexNum]; // P[v]标示v前驱顶点的下标
+    for (int v = 0; v < matrixGraph->vexNum; v++) {  // 初始化数据
+        book[v] = false;
+        P[v] = 0;
+        D[v] = matrixGraph->matrix[0][v];
+    }
+
+    D[v0] = 0; // v0到v0距离为0
+    book[v0] = true;
+
+    // 开始主循环，每次求得v0到某个顶点的最短距离
+    int k = 0;
+    for (int v = 1; v < matrixGraph->vexNum; v++) {
+        int min = 32767;
+
+        for (int w = 0; w < matrixGraph->vexNum; w++) {  // 寻找到达v0距离最短的点
+            if (!book[w] && D[w] < min) {
+                k = w;
+                min = D[w];
+            }
+        }
+
+        book[k] = true; // 将此时找到的点标记
+        for (int w = 0; w < matrixGraph->vexNum; w++) { // 根据本次找达v0最短的点，更新其他点到v0的距离
+
+            // 如果经过顶点k的路径比现在路径更短的话
+            if (!book[w] && (min + matrixGraph->matrix[k][w] < D[w])) {
+                D[w] = min + matrixGraph->matrix[k][w];
+                P[w] = k;
+            }
+        }
+    }
+}
+
+/**
+ * 使用Floyd算法对最短路径进行求解
+ *
+ * @param matrixGraph 邻接矩阵存储结构的图
+ * @param P P[v][w]表示v到其余各点w最短路径
+ * @param D D[v][w]表示v带其余各点w的带权路径长度和
+ */
+void shortestPath_Floyd(MatrixGraph matrixGraph,
+                        int P[matrixGraph->vexNum][matrixGraph->vexNum],
+                        int D[matrixGraph->vexNum][matrixGraph->vexNum]) {
+
+    //初始化D和P
+    for (int v = 0; v < matrixGraph->vexNum; v++) {
+        for (int w = 0; w < matrixGraph->vexNum; w++) {
+            D[v][w] = matrixGraph->matrix[v][w];
+            P[v][w] = w;
+        }
+    }
+
+    for (int k = 0; k < matrixGraph->vexNum; k++) {
+        for (int v = 0; v < matrixGraph->vexNum; v++) {
+            for (int w = 0; w < matrixGraph->vexNum; w++) {
+
+                if (D[v][w] > D[v][k] + D[k][w]) { // 如果经过下标为k的顶点路径比原两点间的路径更短，则更新
+                    D[v][w] = D[v][k] + D[k][w];
+                    P[v][w] = P[v][k]; // 路径设置经过下标为k的顶点
+                }
+            }
+        }
+    }
+
+}
