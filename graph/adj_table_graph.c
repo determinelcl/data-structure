@@ -70,6 +70,8 @@ void newEdgeRelationForUD_ATG(const EdgeType *edges, int countOfEdge, AdjTableGr
 
 void dfs_ATG(AdjTableGraph tableGraph, bool *visited, int index);
 
+void calInDegree_ATG(AdjTableGraph tableGraph, int *inDegree);
+
 AdjTableGraph newAdjTableGraph(Vertices vertices, Edges edges, int countOfVertex, int countOfEdge, GraphKind kind) {
     switch (kind) {
         case DG:
@@ -392,4 +394,162 @@ void bfsTraversal_ATG(AdjTableGraph tableGraph) {
     }
 
     fprintf(stdout, "\n\n");
+}
+
+bool topologicalSort_ATG(AdjTableGraph tableGraph) {
+    int top = 0; // 栈顶索引
+    // 统计顶点的入度
+    int inDegree[tableGraph->countOfVertex];
+    calInDegree_ATG(tableGraph, inDegree);
+
+    // 存放入度为0的顶点的索引
+    int stack[tableGraph->countOfVertex];
+
+    // 建立入度为0的顶点的栈
+    for (int i = 0; i < tableGraph->countOfVertex; i++) {
+        if (!inDegree[i]) // 如果顶点的入度为0，
+            stack[++top] = i;
+    }
+
+    int count = 0; // 用于统计顶点的个数
+    while (top != 0) {
+        int indexOfTop = stack[top--];
+
+        VertexNode_ATG nextVertex = get_AL(tableGraph->adjTable, indexOfTop + 1);
+        printf("%c\t", nextVertex->vertex);
+        count++;
+
+        for (EdgeNode_ATG edgeNode = nextVertex->firstEdge; edgeNode; edgeNode = edgeNode->next) {
+            int k = edgeNode->adjvex;
+            if (!(--inDegree[k]))  // 将k顶点的邻接点度-1
+                stack[++top] = k;
+        }
+    }
+
+    printf("\n");
+
+    if (count < tableGraph->countOfVertex) // 表示有回路
+        return false;
+    else
+        return true;
+}
+
+void calInDegree_ATG(AdjTableGraph tableGraph, int *inDegree) {
+    for (int i = 0; i < tableGraph->countOfVertex; i++)
+        inDegree[i] = 0;
+
+    for (int i = 1; i <= tableGraph->countOfVertex; i++) {
+        VertexNode_ATG nextVertex = get_AL(tableGraph->adjTable, i);
+        EdgeNode_ATG temp = nextVertex->firstEdge;
+        while (temp) {
+            inDegree[temp->adjvex]++;   // 存放顶点入度信息
+            temp = temp->next;
+        }
+    }
+
+}
+
+/**
+ * 使用栈将拓扑排序序列存储起来，并计算出各个顶点的最早发生时间
+ *
+ * @param tableGraph 邻接表存储结构的图
+ * @param stack2 存储拓扑排序序列的栈
+ * @param ve 存储各顶点的最早发生时间的数组
+ * @return 无回路返回true，否则返回false
+ */
+bool topologicalSort2_ATG(AdjTableGraph tableGraph, int *stack2, int *ve, int *top2) {
+    int stack[tableGraph->countOfVertex];
+    int top = 0;
+    *top2 = 0;
+    int count = 0; // 用于统计顶点的个数
+
+    // 统计顶点的入度
+    int inDegree[tableGraph->countOfVertex];
+    calInDegree_ATG(tableGraph, inDegree);
+
+    for (int i = 0; i < tableGraph->countOfVertex; i++) {
+        if (!inDegree[i])
+            stack[++top] = i;
+    }
+
+    while (top != 0) {
+        int indexOfTop = stack[top--];
+        count++;
+
+        stack2[++(*top2)] = indexOfTop;// 将弹出的顶点序列压入拓扑排序的栈中
+        VertexNode_ATG nextVertex = get_AL(tableGraph->adjTable, indexOfTop + 1);
+
+        for (EdgeNode_ATG edgeNode = nextVertex->firstEdge; edgeNode; edgeNode = edgeNode->next) {
+            int k = edgeNode->adjvex;
+            if (!(--inDegree[k])) // 将k顶点的邻接点度-1
+                stack[++top] = k;
+
+            // 根据公式：ve(j) = Max{ ve(i) + dut(<i, j>) }
+            // 计算出顶点的最大的最早开始时间
+            if ((ve[indexOfTop] + edgeNode->weight) > ve[k])
+                ve[k] = ve[indexOfTop] + edgeNode->weight;
+        }
+    }
+
+    if (count < tableGraph->countOfVertex)
+        return false;
+    else
+        return true;
+}
+
+// 计算关键路径
+void criticalPath_ATG(AdjTableGraph tableGraph) {
+    int ve[tableGraph->countOfVertex], vl[tableGraph->countOfVertex];// 事件的最早发生时间和最迟发生时间
+    int stack2[tableGraph->countOfVertex]; // 用于存储拓扑排序的栈
+    int top2 = 0;
+
+    for (int i = 0; i < tableGraph->countOfVertex; ++i)
+        ve[i] = 0;
+
+    bool rs = topologicalSort2_ATG(tableGraph, stack2, ve, &top2); // 求拓扑排序，计算数组ve和stack2的值
+    if (!rs) {
+        printf("图中存在回路，无法计算关键路径！");
+        return;
+    }
+
+    for (int i = 0; i < tableGraph->countOfVertex; i++)
+        vl[i] = ve[tableGraph->countOfVertex - 1];
+
+
+    // 计算出各顶点的最迟开始时间
+    while (top2 != 0) {
+        int indexOfTop = stack2[top2--];
+        VertexNode_ATG nextVertex = get_AL(tableGraph->adjTable, indexOfTop + 1);
+
+        for (EdgeNode_ATG edgeNode = nextVertex->firstEdge; edgeNode; edgeNode = edgeNode->next) {
+            int k = edgeNode->adjvex;
+            // 根据公式：vl(i) = Min{ vl(j) - dut(<i, j>) }
+            // 计算顶点的最迟开始时间
+            if ((vl[k] - edgeNode->weight) < vl[indexOfTop])
+                vl[indexOfTop] = vl[k] - edgeNode->weight;
+        }
+    }
+
+    // 计算活动的最早开始时间：e(i) 和 最晚开始时间：l(i)
+    for (int j = 0; j < tableGraph->countOfVertex; j++) {
+        VertexNode_ATG nextVertex = get_AL(tableGraph->adjTable, j + 1);
+        for (EdgeNode_ATG edgeNode = nextVertex->firstEdge; edgeNode; edgeNode = edgeNode->next) {
+
+            int k = edgeNode->adjvex;
+            // 根据公式：e(i) = ve(j) 其中边为：<j, k>
+            // 计算活动的最早开始时间
+            int e = ve[j];
+            // 根据公式：l(i) = vl(i) - dut(<j, k>)
+            // 计算活动的最晚开始时间
+            int l = vl[k] - edgeNode->weight;
+
+            // 如果最早开始时间和最晚开始时间相等，说明为关键活动
+            if (e == l) {
+                VertexNode_ATG temp = get_AL(tableGraph->adjTable, k + 1);
+                printf("<%c,%c> length = %d, e = %d, l = %d\n",
+                       nextVertex->vertex, temp->vertex, edgeNode->weight, e, l);
+            }
+        }
+    }
+
 }

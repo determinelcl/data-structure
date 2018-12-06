@@ -69,4 +69,19 @@ void dfsTraversal_ATG(AdjTableGraph tableGraph);
  */
 void bfsTraversal_ATG(AdjTableGraph tableGraph);
 
+/**
+ * 对邻接表存储结构的图进行拓扑排序
+ *
+ * @param tableGraph 邻接表存储结构的图
+ * @return 如果不存在回路返回true，否则返回false
+ */
+bool topologicalSort_ATG(AdjTableGraph tableGraph);
+
+/**
+ * 计算邻接表存储结构的图的关键路径
+ *
+ * @param tableGraph 邻接表存储结构的图
+ */
+void criticalPath_ATG(AdjTableGraph tableGraph);
+
 #endif //HELLO_ADJ_TABLE_GRAPH_H

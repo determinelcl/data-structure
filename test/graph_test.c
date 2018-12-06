@@ -100,7 +100,7 @@ void testAdjTableGraph() {
     // [a, b, c, d, e]
     Edges edges = newEdgeTestCase(VERTEX_SIZE);
 
-    AdjTableGraph tableGraph = newAdjTableGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, DG);
+    AdjTableGraph tableGraph = newAdjTableGraph(vertices, edges, VERTEX_SIZE, VERTEX_SIZE, DN);
     showAdjTableGraph_ATG(tableGraph);
 
     edges = malloc(sizeof(EdgeType) * 2);
@@ -109,7 +109,7 @@ void testAdjTableGraph() {
     edges[0].weight = 60;
 
     edges[1].vi = 3;
-    edges[1].vj = 2;
+    edges[1].vj = 4;
     edges[1].weight = 90;
     newEdgeForGraphVertex_ATG(tableGraph, reAllocEdge(VERTEX_SIZE, edges), 2);
     showAdjTableGraph_ATG(tableGraph);
@@ -119,6 +119,13 @@ void testAdjTableGraph() {
 
     printf("广度优先遍历的结果：\n");
     bfsTraversal_ATG(tableGraph);
+
+    printf("拓扑排序：");
+    bool rs = topologicalSort_ATG(tableGraph);
+    printf("是否存在回路：%s\n", rs ? "否" : "是");
+
+    printf("计算图的关键路径：\n");
+    criticalPath_ATG(tableGraph);
 
     puts("\n");
 }
